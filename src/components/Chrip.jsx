@@ -19,19 +19,31 @@ function Chrip({ data }) {
             marginBottom: '5px',
         },
         chripUsername: {
-            fontWeight: 'bold',
+            fontFamily: 'Bebas Neue',
+            fontSize: '25px',
         },
         chripHandle: {
+            fontFamily: 'Kumar One',
             color: Colors.PrimaryLite,
         },
         chripContent: {
             marginBottom: '10px',
+            fontFamily: 'Roboto Mono',
+            textAlign: 'justify',
         },
         chripFooter: {
             display: 'flex',
             justifyContent: 'space-between',
             color: Colors.PrimaryLite,
+            fontFamily: 'Kumar One',
         },
+        interactable: {
+            cursor: 'pointer',
+            backgroundColor: Colors.backgroundLite,
+            margin: '2px',
+            padding: '2px',
+            borderRadius: '5px',
+        }
     };
 
     return (
@@ -44,9 +56,10 @@ function Chrip({ data }) {
             <div style={styles.chripFooter}>
                 <span>{data.timestamp}</span>
                 <div>
-                    <span>Likes: {data.likes}</span>
-                    <span> Comments: {data.comments}</span>
-                    <span> Rechrips: {data.rechrips}</span>
+                    <span style={styles.interactable}>{data.likes} 👍</span>
+                    <span style={styles.interactable}>{data.likes} 👎</span>
+                    <span style={styles.interactable}>{data.comments} 💬</span>
+                    <span style={styles.interactable}>{data.rechrips} 🔁</span>
                 </div>
             </div>
         </div>

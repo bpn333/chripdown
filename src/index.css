@@ -1,3 +1,32 @@
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url(/fonts/RobotoMono-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: 'Kumar One';
+  src: url(/fonts/KumarOne-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Bebas Neue";
+  src: url(/fonts/BebasNeue-Regular.ttf);
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
 body {
   background-color: #222831;
+}
+
+.signInWithGoogle {
+  transition: all 0.3s;
+}
+
+.signInWithGoogle:hover {
+  transform: scale(1.03);
+  background-color: #7eaaff;
+  color: red;
 }
