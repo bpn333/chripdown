@@ -1,4 +1,4 @@
-import googleIcon from '../assets/image/Google__G__Logo.svg'
+import googleIcon from '../assets/image/Google__G__logo.svg'
 import { Colors } from '../assets/Colors';
 function SignInWithGoogle() {
     const styles = {
