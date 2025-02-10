@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Colors } from "../assets/Colors";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 
 function ChripWriter({ setData, data }) {
@@ -31,8 +31,15 @@ function ChripWriter({ setData, data }) {
         try {
             const db = getFirestore();
             const chripsRef = collection(db, 'chrips');
-            const docref = await addDoc(chripsRef, newChrip);
-            docref && setData([newChrip, ...data]);
+            const docRef = await addDoc(chripsRef, newChrip);
+
+            // Add the tweet ID to the user's chrips array
+            const userDocRef = doc(db, 'users', user.uid);
+            await updateDoc(userDocRef, {
+                chrips: arrayUnion(docRef.id)
+            });
+
+            setData([{ ...newChrip, id: docRef.id }, ...data]);
             setNewTweet('');
         } catch (error) {
             console.error("Error adding chrip: ", error);

@@ -37,6 +37,12 @@
     color: #EEEEEE;
 }
 
+.user-chrips {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 5%;
+}
+
 @media (min-width: 500px) {
     .user-container {
         flex-direction: row;

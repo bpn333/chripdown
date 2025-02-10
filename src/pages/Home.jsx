@@ -4,7 +4,7 @@ import ChripWriter from '../components/ChripWriter';
 import NavBar from '../components/NavBar';
 import { useAuth } from '../auth/AuthProvider';
 import Spinner from '../components/Spinner';
-import { getFirestore, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 function Body() {
     const { user } = useAuth();
@@ -12,17 +12,19 @@ function Body() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchChrips = async () => {
-            const db = getFirestore();
-            const chripsRef = collection(db, 'chrips');
-            const chripsQuery = query(chripsRef, orderBy('timestamp', 'desc'), orderBy('likes', 'desc'), limit(15));
-            const querySnapshot = await getDocs(chripsQuery);
-            const chripsData = querySnapshot.docs.map(doc => doc.data());
+        const db = getFirestore();
+        const chripsRef = collection(db, "chrips");
+        const chripsQuery = query(chripsRef, orderBy("timestamp", "desc"), orderBy("likes", "desc"), limit(15));
+
+        const unsubscribe = onSnapshot(chripsQuery, (querySnapshot) => {
+            const chripsData = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
             setData(chripsData);
             setLoading(false);
-        };
-
-        fetchChrips();
+        });
+        return () => unsubscribe();
     }, []);
 
     const styles = {
