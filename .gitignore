@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # auth token
-src/auth/firebase.js
+.env

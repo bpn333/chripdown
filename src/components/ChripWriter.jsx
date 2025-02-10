@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Colors } from "../assets/Colors";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useAuth } from "../auth/AuthProvider";
+
 function ChripWriter({ setData, data }) {
+    const { user } = useAuth();
     const [newTweet, setNewTweet] = useState('');
     const textareaRef = useRef(null);
 
@@ -11,20 +15,30 @@ function ChripWriter({ setData, data }) {
         }
     }, [newTweet]);
 
-    const addChrip = () => {
+    const addChrip = async () => {
         if (newTweet.trim() === '') return;
         const newChrip = {
-            username: 'Bipin Lamsal',
-            handle: '@bpn333',
-            timestamp: new Date().toLocaleString(),
+            username: user.displayName,
+            handle: `@${user.email.split('@')[0]}`,
+            timestamp: new Date().toISOString(),
             content: newTweet,
             likes: 0,
             comments: 0,
             rechrips: 0,
+            useruid: user.uid
         };
-        setData([newChrip, ...data]);
-        setNewTweet('');
+
+        try {
+            const db = getFirestore();
+            const chripsRef = collection(db, 'chrips');
+            const docref = await addDoc(chripsRef, newChrip);
+            docref && setData([newChrip, ...data]);
+            setNewTweet('');
+        } catch (error) {
+            console.error("Error adding chrip: ", error);
+        }
     };
+
     const styles = {
         input: {
             padding: '10px',
@@ -37,14 +51,17 @@ function ChripWriter({ setData, data }) {
             color: Colors.Primary,
             resize: 'none', // Disable user adjustment
             overflow: 'hidden', // Hide scrollbar
+            fontFamily: 'Roboto Mono',
         },
         button: {
-            padding: '10px 20px',
+            padding: '8px',
             backgroundColor: Colors.PrimaryLite,
             color: Colors.background,
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
+            fontFamily: 'Bebas Neue',
+            fontSize: '15px',
         },
         container: {
             display: 'flex',

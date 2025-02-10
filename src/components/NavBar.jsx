@@ -1,5 +1,5 @@
 import { Colors } from '../assets/Colors';
-function NavBar() {
+function NavBar({ usr, uid }) {
     const styles = {
         container: {
             border: `1px solid ${Colors.PrimaryLite}`,
@@ -17,12 +17,17 @@ function NavBar() {
             fontFamily: 'Bebas Neue',
         }
     }
+    const userPage = () => {
+        if (!usr) return;
+        window.location.href = "/user?id=" + uid;
+    }
     return (
         <div style={styles.container}>
             <span style={styles.span}>Home</span>
             <span style={styles.span}>Something</span>
-            <span style={styles.span}>Home</span>
-            <span style={styles.span}>Home</span>
+            <span style={styles.span} onClick={(userPage)}>
+                {usr || "User"}
+            </span>
         </div>
     );
 }

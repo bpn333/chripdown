@@ -23,8 +23,10 @@ function Chrip({ data }) {
             fontSize: '25px',
         },
         chripHandle: {
-            fontFamily: 'Kumar One',
+            fontFamily: 'Daruma Drop',
             color: Colors.PrimaryLite,
+            fontSize: '20px',
+            cursor: 'pointer',
         },
         chripContent: {
             marginBottom: '10px',
@@ -35,14 +37,15 @@ function Chrip({ data }) {
             display: 'flex',
             justifyContent: 'space-between',
             color: Colors.PrimaryLite,
-            fontFamily: 'Kumar One',
+            fontFamily: 'Daruma Drop',
+            fontSize: '20px',
         },
         interactable: {
             cursor: 'pointer',
             backgroundColor: Colors.backgroundLite,
-            margin: '2px',
-            padding: '2px',
-            borderRadius: '5px',
+            margin: '3px',
+            padding: '3px',
+            borderRadius: '10px',
         }
     };
 
@@ -50,14 +53,14 @@ function Chrip({ data }) {
         <div style={styles.chrip}>
             <div style={styles.chripHeader}>
                 <span style={styles.chripUsername}>{data.username}</span>
-                <span style={styles.chripHandle}>{data.handle}</span>
+                <span style={styles.chripHandle} onClick={(e) => window.location.href = '/user?id=' + data.useruid}>{data.handle}</span>
             </div>
             <div dangerouslySetInnerHTML={{ __html: marked(data.content) }} style={styles.chripContent} />
             <div style={styles.chripFooter}>
-                <span>{data.timestamp}</span>
+                <span>{new Date(data.timestamp).toLocaleString()}</span>
                 <div>
                     <span style={styles.interactable}>{data.likes} 👍</span>
-                    <span style={styles.interactable}>{data.likes} 👎</span>
+                    <span style={styles.interactable}>{data.dislikes} 👎</span>
                     <span style={styles.interactable}>{data.comments} 💬</span>
                     <span style={styles.interactable}>{data.rechrips} 🔁</span>
                 </div>
