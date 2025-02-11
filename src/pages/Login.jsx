@@ -5,34 +5,39 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuth } from "../auth/AuthProvider";
 import Spinner from "../components/Spinner";
 import { useState } from "react";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 function Login() {
     const { user, loading } = useAuth();
+    const { docInProgress, setDocInProgress } = useState(false);
     const [gradient, setGradient] = useState("linear-gradient(90deg, rgb(193, 105, 255) 0%, rgb(117, 120, 255) 100%) text");
 
     const signInGoogle = async () => {
+        setDocInProgress(true);
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-
-            // Save new user data to Firestore Database
             const db = getFirestore();
-            const userDoc = doc(db, "users", user.uid);
-            const newUser = {
-                email: user.email,
-                img: user.photoURL,
-                joined: user.metadata.creationTime,
-                username: user.displayName,
-                chrips: []
-            };
-            await setDoc(userDoc, newUser, { merge: true });
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (!userDocSnap.exists()) {
+                const newUser = {
+                    email: user.email,
+                    img: user.photoURL,
+                    joined: user.metadata.creationTime,
+                    username: user.displayName,
+                    chrips: []
+                };
+                await setDoc(userDocRef, newUser);
+            }
+            setDocInProgress(false);
             window.location.href = "/home";
         } catch (error) {
             console.error("Error signing in with Google: ", error);
         }
     };
+
 
     const handleMouseMove = () => {
         if (Math.random() < 0.93) return;
@@ -70,6 +75,8 @@ function Login() {
         return (
             <Spinner />
         );
+    } else if (user && !docInProgress) {
+        window.location.href = "/home"
     }
     return (
         <div style={styles.container} onMouseMove={handleMouseMove}>

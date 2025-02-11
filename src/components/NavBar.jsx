@@ -20,7 +20,7 @@ function NavBar() {
         }
     }
     const userPage = () => {
-        if (!user) return;
+        if (user) window.location.href = "/login";
         window.location.href = "/user?id=" + user.uid;
     }
     return (
