@@ -2,6 +2,7 @@ import React from 'react';
 import { marked } from 'marked';
 import { Colors } from '../assets/Colors';
 import './chrip_overide.css';
+import LikeDislike from './LikeDislike';
 
 function Chrip({ data }) {
     const styles = {
@@ -41,7 +42,6 @@ function Chrip({ data }) {
             fontSize: '20px',
         },
         interactable: {
-            cursor: 'pointer',
             backgroundColor: Colors.backgroundLite,
             margin: '3px',
             padding: '3px',
@@ -59,8 +59,7 @@ function Chrip({ data }) {
             <div style={styles.chripFooter}>
                 <span>{new Date(data.timestamp).toLocaleString()}</span>
                 <div>
-                    <span style={styles.interactable}>{data.likes} 👍</span>
-                    <span style={styles.interactable}>{data.dislikes} 👎</span>
+                    <LikeDislike id={data.id} initialLikes={data.likes} initialDislikes={data.dislikes} />
                     <span style={styles.interactable}>{data.comments} 💬</span>
                     <span style={styles.interactable}>{data.rechrips} 🔁</span>
                 </div>

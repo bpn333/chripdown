@@ -1,5 +1,7 @@
 import { Colors } from '../assets/Colors';
-function NavBar({ usr, uid }) {
+import { useAuth } from '../auth/AuthProvider';
+function NavBar() {
+    const { user } = useAuth();
     const styles = {
         container: {
             border: `1px solid ${Colors.PrimaryLite}`,
@@ -18,15 +20,15 @@ function NavBar({ usr, uid }) {
         }
     }
     const userPage = () => {
-        if (!usr) return;
-        window.location.href = "/user?id=" + uid;
+        if (!user) return;
+        window.location.href = "/user?id=" + user.uid;
     }
     return (
         <div style={styles.container}>
-            <span style={styles.span}>Home</span>
+            <span style={styles.span} onClick={(e) => window.location.href = "/home"}>Home</span>
             <span style={styles.span}>Something</span>
             <span style={styles.span} onClick={(userPage)}>
-                {usr || "User"}
+                {user?.displayName || "User"}
             </span>
         </div>
     );

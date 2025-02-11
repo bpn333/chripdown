@@ -3,6 +3,7 @@ import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "fi
 import Spinner from "../components/Spinner";
 import Chrip from "../components/Chrip";
 import "./User.css";
+import NavBar from "../components/NavBar";
 
 const User = () => {
     const id = new URLSearchParams(window.location.search).get('id');
@@ -25,7 +26,10 @@ const User = () => {
                     const chripsRef = collection(db, "chrips");
                     const chripsQuery = query(chripsRef, where("__name__", "in", userData.chrips));
                     const chripsSnapshot = await getDocs(chripsQuery);
-                    const chripsData = chripsSnapshot.docs.map(doc => doc.data());
+                    const chripsData = chripsSnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
                     setChrips(chripsData);
                 }
             } else {
@@ -47,6 +51,7 @@ const User = () => {
 
     return (
         <>
+            <NavBar />
             <div className="user-container">
                 <img className="user-img" src={userData.img} alt="User profile" />
                 <div className="user-extra">

@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import Chrip from '../components/Chrip';
 import ChripWriter from '../components/ChripWriter';
 import NavBar from '../components/NavBar';
-import { useAuth } from '../auth/AuthProvider';
 import Spinner from '../components/Spinner';
 import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 function Body() {
-    const { user } = useAuth();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -43,7 +41,7 @@ function Body() {
 
     return (
         <>
-            <NavBar usr={user?.displayName} uid={user?.uid} />
+            <NavBar />
             <ChripWriter setData={setData} data={data} />
             <div style={styles.container}>
                 {data.map((item, index) => (

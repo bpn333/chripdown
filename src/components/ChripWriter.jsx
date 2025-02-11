@@ -23,6 +23,7 @@ function ChripWriter({ setData, data }) {
             timestamp: new Date().toISOString(),
             content: newTweet,
             likes: 0,
+            dislikes: 0,
             comments: 0,
             rechrips: 0,
             useruid: user.uid
@@ -86,7 +87,7 @@ function ChripWriter({ setData, data }) {
                 onChange={(e) => setNewTweet(e.target.value)}
                 placeholder="What's happening?"
             />
-            <button style={styles.button} onClick={addChrip}>Add Tweet</button>
+            <button style={styles.button} onClick={addChrip}>Add Chrip</button>
         </div>
     );
 }

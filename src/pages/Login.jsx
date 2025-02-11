@@ -25,6 +25,7 @@ function Login() {
                 img: user.photoURL,
                 joined: user.metadata.creationTime,
                 username: user.displayName,
+                chrips: []
             };
             await setDoc(userDoc, newUser, { merge: true });
         } catch (error) {
