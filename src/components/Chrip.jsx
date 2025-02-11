@@ -22,10 +22,11 @@ function Chrip({ data }) {
         chripUsername: {
             fontFamily: 'Bebas Neue',
             fontSize: '25px',
+            color: Colors.PrimaryLite,
         },
         chripHandle: {
             fontFamily: 'Daruma Drop',
-            color: Colors.PrimaryLite,
+            color: Colors.backgroundLite,
             fontSize: '20px',
             cursor: 'pointer',
         },
@@ -37,7 +38,7 @@ function Chrip({ data }) {
         chripFooter: {
             display: 'flex',
             justifyContent: 'space-between',
-            color: Colors.PrimaryLite,
+            color: Colors.backgroundLite,
             fontFamily: 'Daruma Drop',
             fontSize: '20px',
         },
@@ -46,6 +47,7 @@ function Chrip({ data }) {
             margin: '3px',
             padding: '3px',
             borderRadius: '10px',
+            color: Colors.PrimaryLite,
         }
     };
 

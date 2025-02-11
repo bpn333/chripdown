@@ -50,8 +50,7 @@ function ChripWriter({ setData, data }) {
     const styles = {
         input: {
             padding: '10px',
-            margin: '10px auto',
-            width: '90%',
+            width: '80%',
             borderRadius: '5px',
             backgroundColor: 'transparent',
             outline: 'none',
@@ -70,11 +69,13 @@ function ChripWriter({ setData, data }) {
             cursor: 'pointer',
             fontFamily: 'Bebas Neue',
             fontSize: '15px',
+            margin: '10px',
         },
         container: {
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'center',
             margin: '10px 5%',
         }
     }

@@ -12,6 +12,11 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLikes(initialLikes);
+        setDislikes(initialDislikes);
+    }, [initialLikes, initialDislikes]);
+
+    useEffect(() => {
         if (!user) return;
 
         const fetchInteraction = async () => {
@@ -64,6 +69,16 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
                     transaction.update(postRef, { likes: newLikes, dislikes: newDislikes });
                     setLiked(false);
                     setDisliked(true);
+                } else if (action === "like" && liked) {
+                    newLikes -= 1;
+                    transaction.delete(userInteractionRef);
+                    transaction.update(postRef, { likes: newLikes });
+                    setLiked(false);
+                } else if (action === "dislike" && disliked) {
+                    newDislikes -= 1;
+                    transaction.delete(userInteractionRef);
+                    transaction.update(postRef, { dislikes: newDislikes });
+                    setDisliked(false);
                 }
                 setLikes(newLikes);
                 setDislikes(newDislikes);
@@ -83,6 +98,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
             borderRadius: '10px',
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.5 : 1,
+            color: Colors.PrimaryLite,
         },
         dislike: {
             backgroundColor: disliked ? 'red' : Colors.backgroundLite,
@@ -91,6 +107,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
             borderRadius: '10px',
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.5 : 1,
+            color: Colors.PrimaryLite,
         }
     };
 
