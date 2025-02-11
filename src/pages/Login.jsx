@@ -9,7 +9,7 @@ import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 function Login() {
     const { user, loading } = useAuth();
-    const { docInProgress, setDocInProgress } = useState(false);
+    const [docInProgress, setDocInProgress] = useState(false);
     const [gradient, setGradient] = useState("linear-gradient(90deg, rgb(193, 105, 255) 0%, rgb(117, 120, 255) 100%) text");
 
     const signInGoogle = async () => {
