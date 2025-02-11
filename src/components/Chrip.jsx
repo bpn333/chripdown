@@ -38,6 +38,8 @@ function Chrip({ data, show = true }) {
             display: 'flex',
             justifyContent: 'space-between',
             marginBottom: '5px',
+            flexWrap: 'wrap',
+            gap: '5px'
         },
         chripUsername: {
             fontFamily: 'Bebas Neue',
@@ -62,10 +64,11 @@ function Chrip({ data, show = true }) {
             color: Colors.backgroundLite,
             fontFamily: 'Daruma Drop',
             fontSize: '20px',
+            flexWrap: 'wrap',
+            gap: '5px'
         },
         interactable: {
             backgroundColor: Colors.backgroundLite,
-            margin: '3px',
             padding: '3px',
             borderRadius: '10px',
             color: Colors.PrimaryLite,

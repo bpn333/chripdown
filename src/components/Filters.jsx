@@ -13,6 +13,8 @@ function Filters({ filter, setFilter }) {
             flexDirection: 'row',
             justifyContent: 'space-around',
             margin: '10px 5%',
+            flexWrap: "wrap",
+            gap: "10px"
         }}>
             {Object.entries(Filters).map(([label, value]) => (
                 <button

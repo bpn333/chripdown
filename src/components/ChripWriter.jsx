@@ -77,6 +77,7 @@ function ChripWriter({ setData, data }) {
             alignItems: 'center',
             justifyContent: 'center',
             margin: '10px 5%',
+            flexWrap: "wrap"
         }
     }
     return (
