@@ -11,10 +11,16 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [loading, setLoading] = useState(false);
 
+    //fix old state retain
     useEffect(() => {
         setLikes(initialLikes);
         setDislikes(initialDislikes);
     }, [initialLikes, initialDislikes]);
+
+    useEffect(() => {
+        setLiked(false);
+        setDisliked(false);
+    }, [id]);
 
     useEffect(() => {
         if (!user) return;

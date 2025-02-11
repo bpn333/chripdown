@@ -28,6 +28,7 @@ function Login() {
                 chrips: []
             };
             await setDoc(userDoc, newUser, { merge: true });
+            window.location.href = "/home";
         } catch (error) {
             console.error("Error signing in with Google: ", error);
         }
@@ -69,9 +70,6 @@ function Login() {
         return (
             <Spinner />
         );
-    }
-    if (user) {
-        window.location.href = "/home";
     }
     return (
         <div style={styles.container} onMouseMove={handleMouseMove}>

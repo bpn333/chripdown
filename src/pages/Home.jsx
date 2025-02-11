@@ -13,6 +13,8 @@ function Body() {
     const [chripsQuery, setChripsQuery] = useState(0);
 
     useEffect(() => {
+        setData([]);
+        setLoading(true);
         const unsubscribe = onSnapshot(Queries[chripsQuery], (querySnapshot) => {
             const chripsData = querySnapshot.docs.map(doc => ({
                 id: doc.id,
@@ -23,11 +25,12 @@ function Body() {
         });
         return () => unsubscribe();
     }, [chripsQuery]);
-
     const Queries = [
         query(chripsRef, orderBy("timestamp", "desc"), orderBy("likes", "desc"), limit(15)),    //recent
         query(chripsRef, orderBy("likes", "desc"), orderBy("dislikes", "asc"), orderBy("timestamp", "desc"), limit(15)),    //popular
         query(chripsRef, orderBy("dislikes", "desc"), limit(15)),    //most controversial
+        query(chripsRef, orderBy("rechrips", "desc"), limit(15)),   //rechrips
+        query(chripsRef, orderBy("comments", "desc"), limit(15))    //comments
     ];
 
     const styles = {
@@ -50,8 +53,8 @@ function Body() {
             <ChripWriter setData={setData} data={data} />
             <Filters filter={chripsQuery} setFilter={setChripsQuery} />
             <div style={styles.container}>
-                {data.map((item, index) => (
-                    <Chrip key={index} data={item} />
+                {data.map((item) => (
+                    <Chrip key={item.id} data={item} />
                 ))}
             </div>
         </>

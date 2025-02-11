@@ -4,6 +4,8 @@ function Filters({ filter, setFilter }) {
         Recent: 0,
         Popular: 1,
         Controversial: 2,
+        Rechrips: 3,
+        Comments: 4
     };
     return (
         <div style={{
