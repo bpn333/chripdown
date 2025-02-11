@@ -17,6 +17,7 @@ function NavBar() {
             fontSize: '25px',
             fontWeight: 'bold',
             fontFamily: 'Bebas Neue',
+            userSelect: 'none'
         }
     }
     const userPage = () => {

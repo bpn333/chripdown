@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Chrip from '../components/Chrip';
 import ChripWriter from '../components/ChripWriter';
 import NavBar from '../components/NavBar';
@@ -9,29 +9,30 @@ import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'fir
 function Body() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const chripsRef = collection(getFirestore(), "chrips");
     const [chripsQuery, setChripsQuery] = useState(0);
 
+    const chripsRef = useMemo(() => collection(getFirestore(), "chrips"), []);
+
+    const Queries = useMemo(() => [
+        query(chripsRef, orderBy("timestamp", "desc"), orderBy("likes", "desc"), limit(15)),    // recent
+        query(chripsRef, orderBy("likes", "desc"), orderBy("dislikes", "asc"), orderBy("timestamp", "desc"), limit(15)),    // popular
+        query(chripsRef, orderBy("dislikes", "desc"), limit(15)),    // most controversial
+        query(chripsRef, orderBy("rechrips", "desc"), limit(15)),   // rechrips
+        query(chripsRef, orderBy("comments", "desc"), limit(15)),    // comments
+        query(chripsRef, orderBy("timestamp", "asc"))   //everything
+    ], [chripsRef]);
+
     useEffect(() => {
-        setData([]);
         setLoading(true);
         const unsubscribe = onSnapshot(Queries[chripsQuery], (querySnapshot) => {
-            const chripsData = querySnapshot.docs.map(doc => ({
+            setData(querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            }));
-            setData(chripsData);
+            })));
             setLoading(false);
         });
         return () => unsubscribe();
-    }, [chripsQuery]);
-    const Queries = [
-        query(chripsRef, orderBy("timestamp", "desc"), orderBy("likes", "desc"), limit(15)),    //recent
-        query(chripsRef, orderBy("likes", "desc"), orderBy("dislikes", "asc"), orderBy("timestamp", "desc"), limit(15)),    //popular
-        query(chripsRef, orderBy("dislikes", "desc"), limit(15)),    //most controversial
-        query(chripsRef, orderBy("rechrips", "desc"), limit(15)),   //rechrips
-        query(chripsRef, orderBy("comments", "desc"), limit(15))    //comments
-    ];
+    }, [chripsQuery, Queries]);
 
     const styles = {
         container: {

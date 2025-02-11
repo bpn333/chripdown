@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { marked } from 'marked';
 import { Colors } from '../assets/Colors';
-import './chrip_overide.css';
 import LikeDislike from './LikeDislike';
 import ReChrips from './ReChrips';
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import ChripContent from './ChripContent';
 
 function Chrip({ data, show = true }) {
     const [originalChrip, setOriginalChrip] = useState(null);
@@ -32,7 +31,7 @@ function Chrip({ data, show = true }) {
             padding: '10px',
             marginBottom: '10px',
             backgroundColor: Colors.background,
-            color: Colors.Primary,
+            color: Colors.Primary
         },
         chripHeader: {
             display: 'flex',
@@ -45,6 +44,7 @@ function Chrip({ data, show = true }) {
             fontFamily: 'Bebas Neue',
             fontSize: '25px',
             color: Colors.PrimaryLite,
+            userSelect: 'none'
         },
         chripHandle: {
             fontFamily: 'Daruma Drop',
@@ -52,11 +52,7 @@ function Chrip({ data, show = true }) {
             fontSize: '20px',
             cursor: 'pointer',
             overflow: 'hidden',
-        },
-        chripContent: {
-            marginBottom: '10px',
-            fontFamily: 'Roboto Mono',
-            textAlign: 'justify',
+            userSelect: 'none'
         },
         chripFooter: {
             display: 'flex',
@@ -81,7 +77,7 @@ function Chrip({ data, show = true }) {
                 <span style={styles.chripUsername}>{data.username}</span>
                 <span style={styles.chripHandle} onClick={(e) => window.location.href = '/user?id=' + data.useruid}>{data.handle}</span>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: marked(data.content) }} style={styles.chripContent} />
+            <ChripContent content={data.content} />
             {originalChrip && < Chrip data={originalChrip} show={false} />}
             {show
                 &&

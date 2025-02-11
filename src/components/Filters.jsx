@@ -5,7 +5,8 @@ function Filters({ filter, setFilter }) {
         Popular: 1,
         Controversial: 2,
         Rechrips: 3,
-        Comments: 4
+        Comments: 4,
+        Everything: 5
     };
     return (
         <div style={{
@@ -14,7 +15,7 @@ function Filters({ filter, setFilter }) {
             justifyContent: 'space-around',
             margin: '10px 5%',
             flexWrap: "wrap",
-            gap: "10px"
+            gap: "5px"
         }}>
             {Object.entries(Filters).map(([label, value]) => (
                 <button
@@ -22,12 +23,13 @@ function Filters({ filter, setFilter }) {
                     style={{
                         padding: '8px',
                         backgroundColor: value == filter ? Colors.Primary : Colors.backgroundLite,
-                        color: Colors.PrimaryLite,
+                        color: value == 5 ? "red" : Colors.PrimaryLite,
                         border: 'none',
                         borderRadius: '5px',
                         cursor: 'pointer',
                         fontFamily: 'Bebas Neue',
-                        fontSize: '15px',
+                        fontSize: '20px',
+                        userSelect: 'none'
                     }}
                     onClick={() => setFilter(value)}
                 >

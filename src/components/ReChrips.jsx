@@ -2,6 +2,7 @@ import { Colors } from "../assets/Colors";
 import { useState, useRef, useEffect } from "react";
 import { getFirestore, collection, addDoc, doc, runTransaction } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
+import { memo } from "react";
 
 function ReChrips({ id, initialRechrips, isRechrip }) {
     const { user } = useAuth();
@@ -11,6 +12,10 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
     const [loading, setLoading] = useState(false);
     const hiddenChripWriter = useRef(null);
     const popupRef = useRef(null);
+
+    useEffect(() => {
+        setReChrip(initialRechrips);
+    }, [initialRechrips]);
 
     useEffect(() => {
         if (hiddenChripWriter.current) {
@@ -91,13 +96,14 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
             zIndex: 1000,
         },
         textarea: {
-            width: '30vw',
+            width: '40vw',
             borderRadius: '5px',
             border: `1px solid ${Colors.PrimaryLite}`,
             backgroundColor: 'transparent',
             color: Colors.Primary,
             resize: 'none',
             fontFamily: 'Roboto Mono',
+            margin: '3px'
         },
         button: {
             padding: '10px',
@@ -108,7 +114,7 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
             cursor: 'pointer',
             fontFamily: 'Bebas Neue',
             fontSize: '15px',
-            marginTop: '10px',
+            marginTop: '3px',
         },
     };
 
@@ -133,7 +139,4 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
     );
 }
 
-export default ReChrips;
-
-
-// why the fuck rechip count dont rerender thing
+export default memo(ReChrips);

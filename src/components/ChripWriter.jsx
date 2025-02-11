@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Colors } from "../assets/Colors";
 import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
+import { memo } from "react";
 
 function ChripWriter({ setData, data }) {
     const { user } = useAuth();
@@ -70,6 +71,7 @@ function ChripWriter({ setData, data }) {
             fontFamily: 'Bebas Neue',
             fontSize: '15px',
             margin: '10px',
+            userSelect: 'none'
         },
         container: {
             display: 'flex',
@@ -93,4 +95,4 @@ function ChripWriter({ setData, data }) {
         </div>
     );
 }
-export default ChripWriter;
+export default memo(ChripWriter);

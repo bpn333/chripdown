@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import Spinner from "../components/Spinner";
 import Chrip from "../components/Chrip";
-import "./User.css";
 import NavBar from "../components/NavBar";
 
 const User = () => {
@@ -11,6 +10,48 @@ const User = () => {
     const [userData, setUserData] = useState(null);
     const [chrips, setChrips] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const styles = {
+        userContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            margin: '1% 5%',
+            padding: '1%',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+        },
+        userImg: {
+            borderRadius: '50%',
+            width: '150px',
+            margin: '30px',
+        },
+        userUsr: {
+            fontSize: '40px',
+            fontFamily: 'Daruma Drop',
+            color: '#00ADB5',
+        },
+        userExtra: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+        },
+        userInfo: {
+            fontFamily: 'Roboto Mono',
+            fontSize: '20px',
+            color: '#EEEEEE',
+        },
+        userDate: {
+            fontFamily: 'Roboto Mono',
+            fontSize: '20px',
+            color: '#EEEEEE',
+        },
+        userChrips: {
+            display: 'flex',
+            flexDirection: 'column',
+            margin: '10px 5%',
+        }
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -52,15 +93,15 @@ const User = () => {
     return (
         <>
             <NavBar />
-            <div className="user-container">
-                <img className="user-img" src={userData.img} alt="User profile" />
-                <div className="user-extra">
-                    <span className="user-usr">{userData.username}</span>
-                    <span className="user-info">@{userData.email.split('@')[0]}</span>
-                    <span className="user-date">Since {userData.joined.slice(0, -4)}</span>
+            <div style={styles.userContainer}>
+                <img style={styles.userImg} src={userData.img} alt="User profile" />
+                <div style={styles.userExtra}>
+                    <span style={styles.userUsr}>{userData.username}</span>
+                    <span style={styles.userInfo}>@{userData.email.split('@')[0]}</span>
+                    <span style={styles.userDate}>Since {userData.joined.slice(0, -4)}</span>
                 </div>
             </div>
-            <div className="user-chrips">
+            <div style={styles.userChrips}>
                 {chrips.map((chrip, index) => (
                     <Chrip key={index} data={chrip} />
                 ))}
