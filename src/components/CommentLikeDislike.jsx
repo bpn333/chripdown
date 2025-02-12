@@ -115,7 +115,7 @@ function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }
             opacity: loading ? 0.5 : 1,
             color: Colors.PrimaryLite,
         }
-    }), [liked, disliked]);
+    }), [liked, disliked, loading]);
 
     return (
         <>
