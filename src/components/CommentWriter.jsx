@@ -17,6 +17,7 @@ function CommentWriter({ postId, setData, data }) {
     }, [newComment]);
 
     const addComment = async () => {
+        if (!user) window.location.href = "/login";
         if (newComment.trim() === '') return;
         const newCommentData = {
             username: user.displayName,

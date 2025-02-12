@@ -38,6 +38,7 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
     }, [popupRef]);
 
     const handleReChrip = async () => {
+        if (!user) window.location.href = "/login";
         if (reChripContent.trim() === '' || loading) return;
 
         setLoading(true);
