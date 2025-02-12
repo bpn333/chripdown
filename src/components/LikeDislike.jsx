@@ -105,6 +105,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.5 : 1,
             color: Colors.PrimaryLite,
+            userSelect: 'none'
         },
         dislike: {
             backgroundColor: disliked ? 'red' : Colors.backgroundLite,
@@ -114,6 +115,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.5 : 1,
             color: Colors.PrimaryLite,
+            userSelect: 'none'
         }
     }), [liked, disliked, loading]);
 

@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { Colors } from "../assets/Colors";
 import Spinner from "../components/Spinner";
 import Chrip from "../components/Chrip";
 import NavBar from "../components/NavBar";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 
 const User = () => {
     const id = new URLSearchParams(window.location.search).get('id');
-
+    const auth = getAuth();
+    const [verifiedUser, setVerifiedUser] = useState(false);
     const [userData, setUserData] = useState(null);
     const [chrips, setChrips] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -29,7 +32,7 @@ const User = () => {
         userUsr: {
             fontSize: '40px',
             fontFamily: 'Daruma Drop',
-            color: '#00ADB5',
+            color: Colors.PrimaryLite,
         },
         userExtra: {
             display: 'flex',
@@ -39,56 +42,71 @@ const User = () => {
         userInfo: {
             fontFamily: 'Roboto Mono',
             fontSize: '20px',
-            color: '#EEEEEE',
+            color: Colors.Primary,
         },
         userDate: {
             fontFamily: 'Roboto Mono',
             fontSize: '20px',
-            color: '#EEEEEE',
+            color: Colors.Primary,
         },
         userChrips: {
             display: 'flex',
             flexDirection: 'column',
             margin: '10px 5%',
+        },
+        signOutButton: {
+            backgroundColor: Colors.PrimaryLite,
+            fontFamily: 'Bebas Neue',
+            fontSize: '20px',
+            padding: '3px',
+            color: Colors.background
         }
     }), []);
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const db = getFirestore();
-            const userDoc = doc(db, "users", id);
-            const userSnapshot = await getDoc(userDoc);
-            if (userSnapshot.exists()) {
-                const userData = userSnapshot.data();
-                setUserData(userData);
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setVerifiedUser(user?.uid === id);
+        });
 
-                // Fetch chrips based on the user's chrips array
-                if (userData.chrips && userData.chrips.length > 0) {
-                    const chripsRef = collection(db, "chrips");
-                    const chripsQuery = query(chripsRef, where("__name__", "in", userData.chrips));
-                    const chripsSnapshot = await getDocs(chripsQuery);
-                    const chripsData = chripsSnapshot.docs.map(doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    }));
-                    setChrips(chripsData);
-                }
-            } else {
-                console.error("No such user!");
-            }
+        return () => unsubscribe(); // Cleanup the listener when component unmounts
+    }, [id]);
+
+    useEffect(() => {
+        if (!id) {
             setLoading(false);
+            return;
+        }
+
+        const fetchUserData = async () => {
+            try {
+                const db = getFirestore();
+                const userDoc = doc(db, "users", id);
+                const userSnapshot = await getDoc(userDoc);
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setUserData(userData);
+
+                    if (userData.chrips?.length > 0) {
+                        const chripsRef = collection(db, "chrips");
+                        const chripsQuery = query(chripsRef, where("__name__", "in", userData.chrips));
+                        const chripsSnapshot = await getDocs(chripsQuery);
+                        setChrips(chripsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                    }
+                } else {
+                    console.error("No such user!");
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchUserData();
     }, [id]);
 
-    if (loading) {
-        return <Spinner />;
-    }
-
-    if (!userData) {
-        return <div>User not found</div>;
-    }
+    if (loading) return <Spinner />;
+    if (!userData) return <div>User not found</div>;
 
     return (
         <>
@@ -99,12 +117,19 @@ const User = () => {
                     <span style={styles.userUsr}>{userData.username}</span>
                     <span style={styles.userInfo}>@{userData.email.split('@')[0]}</span>
                     <span style={styles.userDate}>Since {userData.joined.slice(0, -4)}</span>
+                    {verifiedUser && <button style={styles.signOutButton}
+                        onClick={async () => {
+                            try {
+                                await signOut(auth);
+                            } catch (error) {
+                                console.error("Sign-out error:", error);
+                            }
+                        }}
+                    >LogOut</button>}
                 </div>
             </div>
             <div style={styles.userChrips}>
-                {chrips.map((chrip, index) => (
-                    <Chrip key={index} data={chrip} />
-                ))}
+                {chrips.map((chrip) => <Chrip key={chrip.id} data={chrip} />)}
             </div>
         </>
     );

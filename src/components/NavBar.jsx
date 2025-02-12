@@ -22,8 +22,7 @@ function NavBar() {
         }
     }), [])
     const userPage = () => {
-        if (user) window.location.href = "/login";
-        window.location.href = "/user?id=" + user.uid;
+        !user ? window.location.href = "/login" : window.location.href = "/user?id=" + user.uid;
     }
     return (
         <div style={styles.container}>

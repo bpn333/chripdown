@@ -13,7 +13,8 @@ const CommentComponent = memo(({ count, id }) => {
                 padding: '3px',
                 borderRadius: '10px',
                 color: Colors.PrimaryLite,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                userSelect: 'none'
             }}
             onClick={(e) => window.location.href = '/post/' + id}
         >{count} 💬</span>

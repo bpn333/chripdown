@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<ProtectedPage><Home /></ProtectedPage>} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/user" element={<ProtectedPage><User /></ProtectedPage>} />
+        <Route path="/user" element={<User />} />
         <Route path="/post/:id" element={<Post />} />
       </Routes>
     </BrowserRouter>

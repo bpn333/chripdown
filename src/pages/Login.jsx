@@ -35,6 +35,7 @@ function Login() {
             window.location.href = "/home";
         } catch (error) {
             console.error("Error signing in with Google: ", error);
+            setDocInProgress(false);
         }
     };
 
@@ -69,7 +70,7 @@ function Login() {
             fontWeight: "bold",
             fontFamily: "Roboto Mono"
         },
-    }), []);
+    }), [gradient]);
 
     if (loading) {
         return (

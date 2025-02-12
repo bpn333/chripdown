@@ -84,6 +84,7 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
             borderRadius: '10px',
             cursor: 'pointer',
             color: Colors.PrimaryLite,
+            userSelect: 'none'
         },
         popup: {
             display: 'flex',
