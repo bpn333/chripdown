@@ -13,7 +13,7 @@ function ChripContent({ content }) {
         },
     }
     return (
-        <div dangerouslySetInnerHTML={{ __html: marked(content) }} style={styles.chripContent} />
+        <div className="chrip-content" dangerouslySetInnerHTML={{ __html: marked(content) }} style={styles.chripContent} />
     )
 }
 

@@ -1,19 +1,14 @@
-img {
+.chrip-content {
+    max-width: 100%;
+    overflow: auto;
+    word-wrap: break-word;
+    box-sizing: border-box;
     display: block;
+}
+
+.chrip-content * {
     max-width: 100%;
-    height: auto;
-}
-
-iframe {
-    max-width: 100%;
-}
-
-table {
-    border-collapse: collapse;
-}
-
-table,
-th,
-td {
-    border: 1px solid #393E46;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
 }

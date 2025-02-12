@@ -58,6 +58,7 @@ const User = () => {
             backgroundColor: Style.primaryLite,
             fontFamily: Style.font2,
             fontSize: '20px',
+            cursor: 'pointer',
             padding: '3px',
             color: Style.background
         }
