@@ -1,5 +1,5 @@
 import SignInWithGoogle from "../components/SignInWithGoogle";
-import { Colors } from "../assets/Colors";
+import { Style } from "../assets/Style";
 import auth from "../auth/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuth } from "../auth/AuthProvider";
@@ -58,9 +58,9 @@ function Login() {
         },
         heading: {
             fontSize: "40px",
-            color: Colors.Primary,
+            color: Style.primary,
             marginBottom: "20px",
-            fontFamily: "Daruma Drop"
+            fontFamily: Style.font3
         },
         //yoinked style from https://orbitbymozilla.com/
         name: {
@@ -68,9 +68,9 @@ function Login() {
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             fontWeight: "bold",
-            fontFamily: "Roboto Mono"
+            fontFamily: Style.font1
         },
-    }), [gradient]);
+    }), [gradient, Style]);
 
     if (loading) {
         return (

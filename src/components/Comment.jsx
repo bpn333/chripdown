@@ -1,4 +1,4 @@
-import { Colors } from '../assets/Colors';
+import { Style } from '../assets/Style';
 import CommentLikeDislike from './CommentLikeDislike';
 import ChripContent from './ChripContent';
 import { useMemo } from 'react';
@@ -6,12 +6,12 @@ import { useMemo } from 'react';
 function Comment({ data, postId }) {
     const styles = useMemo(() => ({
         comment: {
-            border: `1px solid ${Colors.Primary}`,
+            border: `1px solid ${Style.primary}`,
             borderRadius: '10px',
             padding: '10px',
             marginBottom: '10px',
-            backgroundColor: Colors.background,
-            color: Colors.Primary,
+            backgroundColor: Style.background,
+            color: Style.primary,
             minWidth: '50vw',
             margin: '1vw',
         },
@@ -23,14 +23,14 @@ function Comment({ data, postId }) {
             gap: '5px'
         },
         commentUsername: {
-            fontFamily: 'Bebas Neue',
+            fontFamily: Style.font2,
             fontSize: '25px',
-            color: Colors.PrimaryLite,
+            color: Style.primaryLite,
             userSelect: 'none'
         },
         commentHandle: {
-            fontFamily: 'Daruma Drop',
-            color: Colors.backgroundLite,
+            fontFamily: Style.font3,
+            color: Style.backgroundLite,
             fontSize: '20px',
             cursor: 'pointer',
             overflow: 'hidden',
@@ -39,13 +39,13 @@ function Comment({ data, postId }) {
         commentFooter: {
             display: 'flex',
             justifyContent: 'space-between',
-            color: Colors.backgroundLite,
-            fontFamily: 'Daruma Drop',
+            color: Style.backgroundLite,
+            fontFamily: Style.font3,
             fontSize: '20px',
             flexWrap: 'wrap',
             gap: '5px'
         }
-    }), []);
+    }), [Style]);
 
     return (
         <div style={styles.comment}>

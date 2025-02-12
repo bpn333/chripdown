@@ -1,5 +1,5 @@
 import { useEffect, useState, memo, useMemo } from 'react';
-import { Colors } from '../assets/Colors';
+import { Style } from '../assets/Style';
 import LikeDislike from './LikeDislike';
 import ReChrips from './ReChrips';
 import { getFirestore, doc, getDoc } from "firebase/firestore";
@@ -9,10 +9,10 @@ const CommentComponent = memo(({ count, id }) => {
     return (
         <span
             style={{
-                backgroundColor: Colors.backgroundLite,
+                backgroundColor: Style.backgroundLite,
                 padding: '3px',
                 borderRadius: '10px',
-                color: Colors.PrimaryLite,
+                color: Style.primaryLite,
                 cursor: 'pointer',
                 userSelect: 'none'
             }}
@@ -42,14 +42,14 @@ function Chrip({ data, show = true }) {
 
     const styles = useMemo(() => ({
         chrip: {
-            border: `1px solid ${Colors.PrimaryLite}`,
+            border: `1px solid ${Style.primaryLite}`,
             borderRadius: '10px',
             padding: '10px',
             minWidth: '50vw',
             margin: '1vw',
             marginBottom: '10px',
-            backgroundColor: Colors.background,
-            color: Colors.Primary
+            backgroundColor: Style.background,
+            color: Style.primary
         },
         chripHeader: {
             display: 'flex',
@@ -59,14 +59,14 @@ function Chrip({ data, show = true }) {
             gap: '5px'
         },
         chripUsername: {
-            fontFamily: 'Bebas Neue',
+            fontFamily: Style.font2,
             fontSize: '25px',
-            color: Colors.PrimaryLite,
+            color: Style.primaryLite,
             userSelect: 'none'
         },
         chripHandle: {
-            fontFamily: 'Daruma Drop',
-            color: Colors.backgroundLite,
+            fontFamily: Style.font3,
+            color: Style.backgroundLite,
             fontSize: '20px',
             cursor: 'pointer',
             overflow: 'hidden',
@@ -75,13 +75,13 @@ function Chrip({ data, show = true }) {
         chripFooter: {
             display: 'flex',
             justifyContent: 'space-between',
-            color: Colors.backgroundLite,
-            fontFamily: 'Daruma Drop',
+            color: Style.backgroundLite,
+            fontFamily: Style.font3,
             fontSize: '20px',
             flexWrap: 'wrap',
             gap: '5px'
         }
-    }), []);
+    }), [Style]);
 
     return (
         <div style={styles.chrip} >

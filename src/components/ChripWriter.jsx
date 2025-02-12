@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Colors } from "../assets/Colors";
+import { Style } from "../assets/Style";
 import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
@@ -55,20 +55,20 @@ function ChripWriter({ setData, data }) {
             borderRadius: '5px',
             backgroundColor: 'transparent',
             outline: 'none',
-            border: `1px solid ${Colors.PrimaryLite}`,
-            color: Colors.Primary,
+            border: `1px solid ${Style.primaryLite}`,
+            color: Style.primary,
             resize: 'none', // Disable user adjustment
             overflow: 'hidden', // Hide scrollbar
-            fontFamily: 'Roboto Mono',
+            fontFamily: Style.font1,
         },
         button: {
             padding: '8px',
-            backgroundColor: Colors.PrimaryLite,
-            color: Colors.background,
+            backgroundColor: Style.primaryLite,
+            color: Style.background,
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
-            fontFamily: 'Bebas Neue',
+            fontFamily: Style.font2,
             fontSize: '15px',
             margin: '10px',
             userSelect: 'none'
@@ -81,7 +81,7 @@ function ChripWriter({ setData, data }) {
             flexWrap: "wrap",
             margin: "10px"
         }
-    }), []);
+    }), [Style]);
     return (
         <div style={styles.container}>
             <textarea

@@ -1,4 +1,4 @@
-import { Colors } from "../assets/Colors";
+import { Style } from "../assets/Style";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { getFirestore, collection, addDoc, doc, runTransaction } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
@@ -78,12 +78,12 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
 
     const styles = useMemo(() => ({
         rechripButton: {
-            backgroundColor: Colors.backgroundLite,
+            backgroundColor: Style.backgroundLite,
             margin: '3px',
             padding: '3px',
             borderRadius: '10px',
             cursor: 'pointer',
-            color: Colors.PrimaryLite,
+            color: Style.primaryLite,
             userSelect: 'none'
         },
         popup: {
@@ -93,31 +93,31 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: Colors.background,
+            backgroundColor: Style.background,
             zIndex: 1000,
         },
         textarea: {
             width: '40vw',
             borderRadius: '5px',
-            border: `1px solid ${Colors.PrimaryLite}`,
+            border: `1px solid ${Style.primaryLite}`,
             backgroundColor: 'transparent',
-            color: Colors.Primary,
+            color: Style.primary,
             resize: 'none',
-            fontFamily: 'Roboto Mono',
+            fontFamily: Style.font1,
             margin: '3px'
         },
         button: {
             padding: '10px',
-            backgroundColor: Colors.PrimaryLite,
-            color: Colors.background,
+            backgroundColor: Style.primaryLite,
+            color: Style.background,
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
-            fontFamily: 'Bebas Neue',
+            fontFamily: Style.font2,
             fontSize: '15px',
             marginTop: '3px',
         },
-    }), []);
+    }), [Style]);
 
     return (
         <>

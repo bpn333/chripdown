@@ -1,5 +1,5 @@
 import googleIcon from '../assets/image/Google__G__logo.svg'
-import { Colors } from '../assets/Colors';
+import { Style } from '../assets/Style';
 function SignInWithGoogle() {
     const styles = {
         container: {
@@ -8,12 +8,12 @@ function SignInWithGoogle() {
             alignItems: 'center',
             width: '300px',
             height: '50px',
-            border: '1px solid ' + Colors.PrimaryLite,
+            border: '1px solid ' + Style.primaryLite,
             fontSize: '20px',
-            color: Colors.Primary,
+            color: Style.primary,
             cursor: 'pointer',
             userSelect: 'none',
-            fontFamily: 'Roboto Mono',
+            fontFamily: Style.font1,
         },
         googleImage: {
             width: '30px',

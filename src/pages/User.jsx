@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
-import { Colors } from "../assets/Colors";
+import { Style } from "../assets/Style";
 import Spinner from "../components/Spinner";
 import Chrip from "../components/Chrip";
 import NavBar from "../components/NavBar";
@@ -31,8 +31,8 @@ const User = () => {
         },
         userUsr: {
             fontSize: '40px',
-            fontFamily: 'Daruma Drop',
-            color: Colors.PrimaryLite,
+            fontFamily: Style.font3,
+            color: Style.primaryLite,
         },
         userExtra: {
             display: 'flex',
@@ -40,14 +40,14 @@ const User = () => {
             justifyContent: 'center',
         },
         userInfo: {
-            fontFamily: 'Roboto Mono',
+            fontFamily: Style.font1,
             fontSize: '20px',
-            color: Colors.Primary,
+            color: Style.primary,
         },
         userDate: {
-            fontFamily: 'Roboto Mono',
+            fontFamily: Style.font1,
             fontSize: '20px',
-            color: Colors.Primary,
+            color: Style.primary,
         },
         userChrips: {
             display: 'flex',
@@ -55,13 +55,13 @@ const User = () => {
             margin: '10px 5%',
         },
         signOutButton: {
-            backgroundColor: Colors.PrimaryLite,
-            fontFamily: 'Bebas Neue',
+            backgroundColor: Style.primaryLite,
+            fontFamily: Style.font2,
             fontSize: '20px',
             padding: '3px',
-            color: Colors.background
+            color: Style.background
         }
-    }), []);
+    }), [Style]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {

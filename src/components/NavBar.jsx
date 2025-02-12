@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
-import { Colors } from '../assets/Colors';
+import { Style } from '../assets/Style';
 import { useAuth } from '../auth/AuthProvider';
 function NavBar() {
     const { user } = useAuth();
     const styles = useMemo(() => ({
         container: {
-            border: `1px solid ${Colors.PrimaryLite}`,
+            border: `1px solid ${Style.primaryLite}`,
             display: 'flex',
             justifyContent: 'space-around',
-            backgroundColor: Colors.backgroundLite,
-            color: Colors.PrimaryLite,
+            backgroundColor: Style.backgroundLite,
+            color: Style.primaryLite,
             borderRadius: '10px',
         },
         span: {
@@ -17,17 +17,17 @@ function NavBar() {
             cursor: 'pointer',
             fontSize: '25px',
             fontWeight: 'bold',
-            fontFamily: 'Bebas Neue',
+            fontFamily: Style.font2,
             userSelect: 'none'
         }
-    }), [])
+    }), [Style])
     const userPage = () => {
         !user ? window.location.href = "/login" : window.location.href = "/user?id=" + user.uid;
     }
     return (
         <div style={styles.container}>
             <span style={styles.span} onClick={(e) => window.location.href = "/home"}>Home</span>
-            <span style={styles.span}>Something</span>
+            <span style={styles.span} onClick={(e) => window.location.href = "/settings"}>Settings</span>
             <span style={styles.span} onClick={(userPage)}>
                 {user?.displayName || "User"}
             </span>

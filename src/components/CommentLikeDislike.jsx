@@ -1,7 +1,7 @@
 import { getFirestore, doc, runTransaction, getDoc } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { useEffect, useState, useCallback } from "react";
-import { Colors } from "../assets/Colors";
+import { Style } from "../assets/Style";
 import { useMemo } from "react";
 
 function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }) {
@@ -98,26 +98,26 @@ function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }
 
     const styles = useMemo(() => ({
         like: {
-            backgroundColor: liked ? 'green' : Colors.backgroundLite,
+            backgroundColor: liked ? 'green' : Style.backgroundLite,
             margin: '3px',
             padding: '3px',
             borderRadius: '10px',
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.5 : 1,
-            color: Colors.PrimaryLite,
+            color: Style.primaryLite,
             userSelect: 'none'
         },
         dislike: {
-            backgroundColor: disliked ? 'red' : Colors.backgroundLite,
+            backgroundColor: disliked ? 'red' : Style.backgroundLite,
             margin: '3px',
             padding: '3px',
             borderRadius: '10px',
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.5 : 1,
-            color: Colors.PrimaryLite,
+            color: Style.primaryLite,
             userSelect: 'none'
         }
-    }), [liked, disliked, loading]);
+    }), [liked, disliked, loading, Style]);
 
     return (
         <>

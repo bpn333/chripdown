@@ -1,4 +1,4 @@
-import { Colors } from "../assets/Colors";
+import { Style } from "../assets/Style";
 function Filters({ filter, setFilter }) {
     const Filters = {
         Recent: 0,
@@ -22,12 +22,12 @@ function Filters({ filter, setFilter }) {
                     key={value}
                     style={{
                         padding: '8px',
-                        backgroundColor: value == filter ? Colors.Primary : Colors.backgroundLite,
-                        color: value == 5 ? "red" : Colors.PrimaryLite,
+                        backgroundColor: value == filter ? Style.primary : Style.backgroundLite,
+                        color: value == 5 ? "red" : Style.primaryLite,
                         border: 'none',
                         borderRadius: '5px',
                         cursor: 'pointer',
-                        fontFamily: 'Bebas Neue',
+                        fontFamily: Style.font2,
                         fontSize: '20px',
                         userSelect: 'none'
                     }}
