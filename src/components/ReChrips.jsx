@@ -1,5 +1,5 @@
 import { Colors } from "../assets/Colors";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { getFirestore, collection, addDoc, doc, runTransaction } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
@@ -76,7 +76,7 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
         }
     };
 
-    const styles = {
+    const styles = useMemo(() => ({
         rechripButton: {
             backgroundColor: Colors.backgroundLite,
             margin: '3px',
@@ -116,7 +116,7 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
             fontSize: '15px',
             marginTop: '3px',
         },
-    };
+    }), []);
 
     return (
         <>
@@ -127,10 +127,11 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
                 <div style={styles.popup} ref={popupRef}>
                     <textarea
                         ref={hiddenChripWriter}
+                        rows={5}
                         style={styles.textarea}
                         value={reChripContent}
                         onChange={(e) => setReChripContent(e.target.value)}
-                        placeholder="Add a comment..."
+                        placeholder="Say something..."
                     />
                     <button style={styles.button} onClick={handleReChrip} disabled={loading}>ReChrip</button>
                 </div>

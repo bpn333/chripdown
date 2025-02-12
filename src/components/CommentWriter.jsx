@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Colors } from "../assets/Colors";
-import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { getFirestore, doc, runTransaction, collection, increment } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
 
-function ChripWriter({ setData, data }) {
+function CommentWriter({ postId, setData, data }) {
     const { user } = useAuth();
-    const [newTweet, setNewTweet] = useState('');
+    const [newComment, setNewComment] = useState('');
     const textareaRef = useRef(null);
 
     useEffect(() => {
@@ -14,37 +14,34 @@ function ChripWriter({ setData, data }) {
             textareaRef.current.style.height = 'auto';
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
-    }, [newTweet]);
+    }, [newComment]);
 
-    const addChrip = async () => {
-        if (newTweet.trim() === '') return;
-        const newChrip = {
+    const addComment = async () => {
+        if (newComment.trim() === '') return;
+        const newCommentData = {
             username: user.displayName,
             handle: `@${user.email.split('@')[0]}`,
             timestamp: new Date().toISOString(),
-            content: newTweet,
+            content: newComment,
             likes: 0,
             dislikes: 0,
-            comments: 0,
-            rechrips: 0,
-            useruid: user.uid
+            useruid: user.uid,
         };
 
         try {
             const db = getFirestore();
-            const chripsRef = collection(db, 'chrips');
-            const docRef = await addDoc(chripsRef, newChrip);
+            const commentsRef = collection(db, `chrips/${postId}/comments`);
+            const postRef = doc(db, `chrips/${postId}`);
 
-            // Add the tweet ID to the user's chrips array
-            const userDocRef = doc(db, 'users', user.uid);
-            await updateDoc(userDocRef, {
-                chrips: arrayUnion(docRef.id)
+            await runTransaction(db, async (transaction) => {
+                const newCommentRef = doc(commentsRef);
+                transaction.set(newCommentRef, newCommentData);
+                transaction.update(postRef, { comments: increment(1) });
+                setData([{ ...newCommentData, id: newCommentRef.id }, ...data]);
+                setNewComment('');
             });
-
-            setData([{ ...newChrip, id: docRef.id }, ...data]);
-            setNewTweet('');
         } catch (error) {
-            console.error("Error adding chrip: ", error);
+            console.error("Error adding comment: ", error);
         }
     };
 
@@ -78,8 +75,7 @@ function ChripWriter({ setData, data }) {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            flexWrap: "wrap",
-            margin: "10px"
+            flexWrap: 'wrap'
         }
     }), []);
     return (
@@ -87,12 +83,12 @@ function ChripWriter({ setData, data }) {
             <textarea
                 ref={textareaRef}
                 style={styles.input}
-                value={newTweet}
-                onChange={(e) => setNewTweet(e.target.value)}
-                placeholder="What's happening?"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
             />
-            <button style={styles.button} onClick={addChrip}>Add Chrip</button>
+            <button style={styles.button} onClick={addComment}>Add Comment</button>
         </div>
     );
 }
-export default memo(ChripWriter);
+export default memo(CommentWriter);

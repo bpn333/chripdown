@@ -4,7 +4,7 @@ import auth from "../auth/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuth } from "../auth/AuthProvider";
 import Spinner from "../components/Spinner";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 function Login() {
@@ -46,7 +46,7 @@ function Login() {
         setGradient(`linear-gradient(90deg, ${randomColor1} 0%, ${randomColor2} 100%) text`);
     };
 
-    const styles = {
+    const styles = useMemo(() => ({
         container: {
             display: "flex",
             justifyContent: "center",
@@ -69,7 +69,7 @@ function Login() {
             fontWeight: "bold",
             fontFamily: "Roboto Mono"
         },
-    }
+    }), []);
 
     if (loading) {
         return (

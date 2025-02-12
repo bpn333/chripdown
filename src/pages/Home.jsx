@@ -39,7 +39,6 @@ function Body() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            margin: '10px 5%',
             borderRadius: '10px',
         },
     };

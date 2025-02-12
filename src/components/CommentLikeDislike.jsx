@@ -1,9 +1,10 @@
 import { getFirestore, doc, runTransaction, getDoc } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Colors } from "../assets/Colors";
+import { useMemo } from "react";
 
-function LikeDislike({ id, initialLikes, initialDislikes }) {
+function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }) {
     const { user } = useAuth();
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
@@ -11,7 +12,6 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [loading, setLoading] = useState(false);
 
-    //fix old state retain
     useEffect(() => {
         setLikes(initialLikes);
         setDislikes(initialDislikes);
@@ -20,14 +20,14 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     useEffect(() => {
         setLiked(false);
         setDisliked(false);
-    }, [id]);
+    }, [commentId]);
 
     useEffect(() => {
         if (!user) return;
 
         const fetchInteraction = async () => {
             const db = getFirestore();
-            const userInteractionRef = doc(db, `chrips/${id}/interactions/${user.uid}`);
+            const userInteractionRef = doc(db, `chrips/${postId}/comments/${commentId}/interactions/${user.uid}`);
 
             try {
                 const postInteractionDoc = await getDoc(userInteractionRef);
@@ -42,48 +42,48 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
         };
 
         fetchInteraction();
-    }, [user, id]);
+    }, [user, postId, commentId]);
 
     const handleInteraction = useCallback(async (action) => {
         if (!user || loading) return;
 
         setLoading(true);
         const db = getFirestore();
-        const userInteractionRef = doc(db, `chrips/${id}/interactions/${user.uid}`);
-        const postRef = doc(db, `chrips/${id}`);
+        const userInteractionRef = doc(db, `chrips/${postId}/comments/${commentId}/interactions/${user.uid}`);
+        const commentRef = doc(db, `chrips/${postId}/comments/${commentId}`);
 
         try {
             await runTransaction(db, async (transaction) => {
-                const postDoc = await transaction.get(postRef);
-                if (!postDoc.exists()) throw new Error("Post not found");
+                const commentDoc = await transaction.get(commentRef);
+                if (!commentDoc.exists()) throw new Error("Comment not found");
 
-                const postData = postDoc.data();
-                let newLikes = postData.likes || 0;
-                let newDislikes = postData.dislikes || 0;
+                const commentData = commentDoc.data();
+                let newLikes = commentData.likes || 0;
+                let newDislikes = commentData.dislikes || 0;
 
                 if (action === "like" && !liked) {
                     newLikes += 1;
                     if (disliked) newDislikes -= 1;
                     transaction.set(userInteractionRef, { like: true });
-                    transaction.update(postRef, { likes: newLikes, dislikes: newDislikes });
+                    transaction.update(commentRef, { likes: newLikes, dislikes: newDislikes });
                     setLiked(true);
                     setDisliked(false);
                 } else if (action === "dislike" && !disliked) {
                     newDislikes += 1;
                     if (liked) newLikes -= 1;
                     transaction.set(userInteractionRef, { like: false });
-                    transaction.update(postRef, { likes: newLikes, dislikes: newDislikes });
+                    transaction.update(commentRef, { likes: newLikes, dislikes: newDislikes });
                     setLiked(false);
                     setDisliked(true);
                 } else if (action === "like" && liked) {
                     newLikes -= 1;
                     transaction.delete(userInteractionRef);
-                    transaction.update(postRef, { likes: newLikes });
+                    transaction.update(commentRef, { likes: newLikes });
                     setLiked(false);
                 } else if (action === "dislike" && disliked) {
                     newDislikes -= 1;
                     transaction.delete(userInteractionRef);
-                    transaction.update(postRef, { dislikes: newDislikes });
+                    transaction.update(commentRef, { dislikes: newDislikes });
                     setDisliked(false);
                 }
                 setLikes(newLikes);
@@ -94,7 +94,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
         } finally {
             setLoading(false);
         }
-    }, [user, id, liked, disliked, loading]);
+    }, [user, postId, commentId, liked, disliked, loading]);
 
     const styles = useMemo(() => ({
         like: {
@@ -120,13 +120,13 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     return (
         <>
             <span style={styles.like} onClick={() => handleInteraction("like")}>
-                {likes} 👍
+                {likes} ⬆️
             </span>
             <span style={styles.dislike} onClick={() => handleInteraction("dislike")}>
-                {dislikes} 👎
+                {dislikes} ⬇️
             </span>
         </>
     );
 }
 
-export default LikeDislike;
+export default CommentLikeDislike;

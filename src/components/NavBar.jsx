@@ -1,8 +1,9 @@
+import { useMemo } from 'react';
 import { Colors } from '../assets/Colors';
 import { useAuth } from '../auth/AuthProvider';
 function NavBar() {
     const { user } = useAuth();
-    const styles = {
+    const styles = useMemo(() => ({
         container: {
             border: `1px solid ${Colors.PrimaryLite}`,
             display: 'flex',
@@ -19,7 +20,7 @@ function NavBar() {
             fontFamily: 'Bebas Neue',
             userSelect: 'none'
         }
-    }
+    }), [])
     const userPage = () => {
         if (user) window.location.href = "/login";
         window.location.href = "/user?id=" + user.uid;

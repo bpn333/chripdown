@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import Spinner from "../components/Spinner";
 import Chrip from "../components/Chrip";
@@ -11,7 +11,7 @@ const User = () => {
     const [chrips, setChrips] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const styles = {
+    const styles = useMemo(() => ({
         userContainer: {
             display: 'flex',
             flexDirection: 'row',
@@ -51,7 +51,7 @@ const User = () => {
             flexDirection: 'column',
             margin: '10px 5%',
         }
-    };
+    }), []);
 
     useEffect(() => {
         const fetchUserData = async () => {

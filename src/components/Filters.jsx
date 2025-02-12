@@ -13,7 +13,7 @@ function Filters({ filter, setFilter }) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-around',
-            margin: '10px 5%',
+            margin: '10px',
             flexWrap: "wrap",
             gap: "5px"
         }}>

@@ -7,7 +7,8 @@ function ChripContent({ content }) {
         chripContent: {
             marginBottom: '10px',
             fontFamily: 'Roboto Mono',
-            textAlign: 'justify',
+            maxWidth: '100%',
+            overflowWrap: "break-word"
         },
     }
     return (
