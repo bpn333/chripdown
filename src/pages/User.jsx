@@ -14,7 +14,7 @@ const User = () => {
     const [chrips, setChrips] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const styles = useMemo(() => ({
+    const styles = {
         userContainer: {
             display: 'flex',
             flexDirection: 'row',
@@ -61,7 +61,7 @@ const User = () => {
             padding: '3px',
             color: Style.background
         }
-    }), [Style]);
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
