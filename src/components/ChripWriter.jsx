@@ -93,7 +93,7 @@ function ChripWriter({ setData, data }) {
                 placeholder="What's happening?"
             />
             <button style={styles.button} onClick={addChrip}>Add Chrip</button>
-            <button style={styles.button} onClick={(e) => window.location.href = "https://www.markdownguide.org/cheat-sheet/"}>Syntax</button>
+            <button style={styles.button} onClick={(e) => window.open("https://www.markdownguide.org/cheat-sheet/", "_blank")}>Syntax</button>
         </div>
     );
 }
