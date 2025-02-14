@@ -11,6 +11,7 @@ function NavBar() {
             backgroundColor: Style.backgroundLite,
             color: Style.primaryLite,
             borderRadius: '10px',
+            overflow: 'hidden'
         },
         span: {
             padding: '5px',
