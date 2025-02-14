@@ -17,6 +17,7 @@ function ChripWriter({ setData, data }) {
     }, [newTweet]);
 
     const addChrip = async () => {
+        if (!user) window.location.href = "/login";
         if (newTweet.trim() === '') return;
         const newChrip = {
             username: user.displayName,
@@ -92,6 +93,7 @@ function ChripWriter({ setData, data }) {
                 placeholder="What's happening?"
             />
             <button style={styles.button} onClick={addChrip}>Add Chrip</button>
+            <button style={styles.button} onClick={(e) => window.location.href = "https://www.markdownguide.org/cheat-sheet/"}>Syntax</button>
         </div>
     );
 }
