@@ -1,15 +1,31 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Style, saveStyleToCookies, deleteStyleCookie } from "../assets/Style";
 import NavBar from "../components/NavBar";
 
 const Settings = () => {
-    const [background, setBackground] = useState(Style.background);
-    const [backgroundLite, setBackgroundLite] = useState(Style.backgroundLite);
-    const [primaryLite, setPrimaryLite] = useState(Style.primaryLite);
-    const [primary, setPrimary] = useState(Style.primary);
-    const [font1, setFont1] = useState(Style.font1);
-    const [font2, setFont2] = useState(Style.font2);
-    const [font3, setFont3] = useState(Style.font3);
+    const [background, setBackground] = useState('');
+    const [backgroundLite, setBackgroundLite] = useState('');
+    const [primaryLite, setPrimaryLite] = useState('');
+    const [primary, setPrimary] = useState('');
+    const [font1, setFont1] = useState('');
+    const [font2, setFont2] = useState('');
+    const [font3, setFont3] = useState('');
+
+    useEffect(() => {
+        setBackground(Style.background);
+        setBackgroundLite(Style.backgroundLite);
+        setPrimary(Style.primary);
+        setPrimaryLite(Style.primaryLite);
+        setFont1(Style.font1);
+        setFont2(Style.font2);
+        setFont3(Style.font3);
+    }, []);
+
+    // if i dont initialize using useEffect setting page dont use current Style instead use default Style
+
+    useEffect(() => {
+        document.body.style.backgroundColor = background;
+    }, [background]);
 
     const handleApply = () => {
         const newStyle = {
@@ -30,13 +46,13 @@ const Settings = () => {
         window.location.reload();
     };
 
-    const styles = {
+    const styles = useMemo(() => ({
         container: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: Style.background,
+            backgroundColor: background,
             borderRadius: '10px',
         },
         table: {
@@ -45,18 +61,18 @@ const Settings = () => {
             margin: '20px',
         },
         th: {
-            border: `1px solid ${Style.primaryLite}`,
+            border: `1px solid ${primaryLite}`,
             padding: '10px',
-            backgroundColor: Style.backgroundLite,
-            color: Style.primary,
-            fontFamily: Style.font1,
+            backgroundColor: backgroundLite,
+            color: primary,
+            fontFamily: font1,
         },
         td: {
-            border: `1px solid ${Style.backgroundLite}`,
+            border: `1px solid ${backgroundLite}`,
             padding: '10px',
             backgroundColor: 'transparent',
-            color: Style.primaryLite,
-            fontFamily: Style.font1,
+            color: primaryLite,
+            fontFamily: font1,
         },
         input: {
             width: '100%',
@@ -64,24 +80,24 @@ const Settings = () => {
             borderRadius: '5px',
             border: 'none',
             cursor: 'pointer',
-            outline: `2px solid ${Style.primaryLite}`,
+            outline: `2px solid ${primaryLite}`,
             backgroundColor: 'transparent',
         },
         button: {
             padding: '10px 20px',
-            backgroundColor: Style.primaryLite,
-            color: Style.background,
+            backgroundColor: primaryLite,
+            color: background,
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
-            fontFamily: Style.font2,
+            fontFamily: font2,
             fontSize: '15px',
             marginTop: '10px',
             marginRight: '10px',
         },
         heading: {
-            color: Style.primary,
-            fontFamily: Style.font2,
+            color: primary,
+            fontFamily: font2,
             fontSize: '30px',
             marginBottom: '20px',
         },
@@ -93,12 +109,12 @@ const Settings = () => {
             width: 'calc(100% - 20px)',
             padding: '10px',
             borderRadius: '5px',
-            border: `1px solid ${Style.primaryLite}`,
+            border: `1px solid ${primaryLite}`,
             backgroundColor: 'transparent',
-            color: Style.primary,
-            fontFamily: Style.font1,
+            color: primary,
+            fontFamily: font1,
         }
-    };
+    }), [background, backgroundLite, primary, primaryLite, font1, font2, font3]);
 
     return (
         <>
@@ -165,7 +181,7 @@ const Settings = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style={styles.td}>Font 1</td>
+                            <td style={{ ...styles.td, fontFamily: font1 }}>Font 1</td>
                             <td style={styles.td}>
                                 <input
                                     type="text"
@@ -176,7 +192,7 @@ const Settings = () => {
                             </td>
                         </tr>
                         <tr>
-                            <td style={styles.td}>Font 2</td>
+                            <td style={{ ...styles.td, fontFamily: font2 }}>Font 2</td>
                             <td style={styles.td}>
                                 <input
                                     type="text"
@@ -187,7 +203,7 @@ const Settings = () => {
                             </td>
                         </tr>
                         <tr>
-                            <td style={styles.td}>Font 3</td>
+                            <td style={{ ...styles.td, fontFamily: font3 }}>Font 3</td>
                             <td style={styles.td}>
                                 <input
                                     type="text"

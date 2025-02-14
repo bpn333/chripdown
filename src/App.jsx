@@ -21,7 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/user" element={<User />} />
         <Route path="/post/:id" element={<Post />} />
-        <Route path="/settings" element={<ProtectedPage><Settings /></ProtectedPage>} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
   );

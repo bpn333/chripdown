@@ -64,6 +64,8 @@ const User = () => {
         }
     };
 
+    // if i use useMemo here it only show default Style not latest
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setVerifiedUser(user?.uid === id);

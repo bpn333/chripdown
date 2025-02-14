@@ -1,4 +1,4 @@
-const Style = {
+var Style = {
     background: '#222831',
     backgroundLite: '#393E46',
     primaryLite: '#00ADB5',
@@ -17,7 +17,8 @@ const loadStyleFromCookies = () => {
     const styleCookie = cookies.find(cookie => cookie.startsWith('styles='));
     if (styleCookie) {
         const styles = JSON.parse(styleCookie.split('=')[1]);
-        Object.assign(Style, styles);
+        //Object.assign(Style, styles) // This thing break settings page
+        Style = styles
         document.body.style.backgroundColor = Style.background;
     }
 };
