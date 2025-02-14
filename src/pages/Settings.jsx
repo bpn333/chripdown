@@ -3,13 +3,13 @@ import { Style, saveStyleToCookies, deleteStyleCookie } from "../assets/Style";
 import NavBar from "../components/NavBar";
 
 const Settings = () => {
-    const [background, setBackground] = useState('');
-    const [backgroundLite, setBackgroundLite] = useState('');
-    const [primaryLite, setPrimaryLite] = useState('');
-    const [primary, setPrimary] = useState('');
-    const [font1, setFont1] = useState('');
-    const [font2, setFont2] = useState('');
-    const [font3, setFont3] = useState('');
+    const [background, setBackground] = useState(Style.background);
+    const [backgroundLite, setBackgroundLite] = useState(Style.backgroundLite);
+    const [primaryLite, setPrimaryLite] = useState(Style.primaryLite);
+    const [primary, setPrimary] = useState(Style.primary);
+    const [font1, setFont1] = useState(Style.font1);
+    const [font2, setFont2] = useState(Style.font2);
+    const [font3, setFont3] = useState(Style.font3);
 
     useEffect(() => {
         setBackground(Style.background);
