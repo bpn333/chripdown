@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Style, saveStyleToCookies, deleteStyleCookie } from "../assets/Style";
+import { Style, saveStyleToCookies, deleteStyleCookie, loadStyleFromCookies } from "../assets/Style";
 import NavBar from "../components/NavBar";
 
 const Settings = () => {
@@ -12,6 +12,7 @@ const Settings = () => {
     const [font3, setFont3] = useState(Style.font3);
 
     useEffect(() => {
+        loadStyleFromCookies();
         setBackground(Style.background);
         setBackgroundLite(Style.backgroundLite);
         setPrimary(Style.primary);
