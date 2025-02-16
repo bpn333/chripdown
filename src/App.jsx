@@ -6,6 +6,7 @@ import User from "./pages/User";
 import ProtectedPage from "./auth/ProtectedPage";
 import Post from "./pages/Post";
 import Settings from "./pages/Settings";
+import Help from "./pages/Help";
 import { loadStyleFromCookies } from "./assets/Style";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/post/:id" element={<Post />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/help" element={<Help />} />
       </Routes>
     </BrowserRouter>
   );

@@ -45,7 +45,8 @@ function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }
     }, [user, postId, commentId]);
 
     const handleInteraction = useCallback(async (action) => {
-        if (!user || loading) return;
+        if (!user) window.location.href = "/login";
+        if (loading) return;
 
         setLoading(true);
         const db = getFirestore();

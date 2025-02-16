@@ -97,16 +97,21 @@ function ChripWriter({ setData, data }) {
                     placeholder="What's happening?"
                 />
                 <button style={{ ...styles.button, backgroundColor: showLiveChrip ? 'green' : Style.backgroundLite }} onClick={(e) => setShowLiveChrip(!showLiveChrip)} >👁️</button>
-                <button style={styles.button} onClick={addChrip}>Add Chrip</button>
-                <button style={styles.button} onClick={(e) => window.open("https://www.markdownguide.org/cheat-sheet/", "_blank")}>Syntax</button>
+                <button
+                    style={styles.button}
+                    onClick={addChrip}
+                    onMouseEnter={(e) => (e.target.style.backgroundColor = Style.primary)}
+                    onMouseLeave={(e) => (e.target.style.backgroundColor = Style.primaryLite)}
+                >Add Chrip</button>
+                <button style={styles.button} onClick={(e) => window.location.href = "/help"}>Help</button>
             </div>
-            {showLiveChrip &&
+            {(showLiveChrip && newTweet.trim()) &&
                 <Chrip
                     data={{
-                        username: user.displayName,
-                        handle: `@${user.email.split('@')[0]}`,
+                        username: user?.displayName || 'anonymous',
+                        handle: `@${user?.email.split('@')[0]}`,
                         content: newTweet,
-                        useruid: user.uid
+                        useruid: user?.uid
                     }}
                     show={false}
                 />

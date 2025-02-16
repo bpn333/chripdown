@@ -88,7 +88,12 @@ function CommentWriter({ postId, setData, data }) {
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add a comment..."
             />
-            <button style={styles.button} onClick={addComment}>Add Comment</button>
+            <button
+                style={styles.button}
+                onClick={addComment}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = Style.primary)}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = Style.primaryLite)}
+            >Add Comment</button>
         </div>
     );
 }

@@ -14,6 +14,7 @@ function SignInWithGoogle() {
             cursor: 'pointer',
             userSelect: 'none',
             fontFamily: Style.font1,
+            transition: '0.3s'
         },
         googleImage: {
             width: '30px',
@@ -21,7 +22,16 @@ function SignInWithGoogle() {
         }
     }
     return (
-        <div className="signInWithGoogle" style={styles.container}>
+        <div style={styles.container}
+            onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#7eaaff";
+                e.currentTarget.style.scale = "1.03";
+            }}
+            onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.scale = "1";
+            }}
+        >
             <img src={googleIcon} style={styles.googleImage} />
             <span>Sign In With Google</span>
         </div>
