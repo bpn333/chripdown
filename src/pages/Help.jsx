@@ -154,7 +154,7 @@ const Help = () => {
                 </a>
                 <h2 style={styles.heading}>Help & Support</h2>
                 <form
-                    action="https://formsubmit.co/bipinlamsal2004@gmail.com"
+                    action="https://formsubmit.co/50342c617a04b1322ac19cbc0abb273d"
                     method="POST"
                     style={styles.form}
                 >
