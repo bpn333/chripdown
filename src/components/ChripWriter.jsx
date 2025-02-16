@@ -46,6 +46,7 @@ function ChripWriter({ setData, data }) {
 
             setData([{ ...newChrip, id: docRef.id }, ...data]);
             setNewTweet('');
+            setShowLiveChrip(false);
         } catch (error) {
             console.error("Error adding chrip: ", error);
         }
