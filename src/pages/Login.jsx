@@ -57,9 +57,10 @@ function Login() {
             userSelect: "none"
         },
         heading: {
-            fontSize: "40px",
+            fontSize: "50px",
             color: Style.primary,
             marginBottom: "20px",
+            textAlign: 'center',
             fontFamily: Style.font3
         },
         //yoinked style from https://orbitbymozilla.com/

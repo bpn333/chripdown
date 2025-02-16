@@ -28,5 +28,4 @@ body {
 .signInWithGoogle:hover {
   transform: scale(1.03);
   background-color: #7eaaff;
-  color: red;
 }
