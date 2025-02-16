@@ -125,7 +125,7 @@ const Settings = () => {
                     <thead>
                         {/* for colors */}
                         <tr>
-                            <th colSpan={2} style={styles.th}>Style</th>
+                            <th colSpan={2} style={styles.th}>Colors</th>
                         </tr>
                     </thead>
                     <tbody>

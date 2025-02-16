@@ -3,11 +3,13 @@ import { Style } from "../assets/Style";
 import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
+import Chrip from './Chrip';
 
 function ChripWriter({ setData, data }) {
     const { user } = useAuth();
     const [newTweet, setNewTweet] = useState('');
     const textareaRef = useRef(null);
+    const [showLiveChrip, setShowLiveChrip] = useState(false);
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -84,17 +86,31 @@ function ChripWriter({ setData, data }) {
         }
     }), [Style]);
     return (
-        <div style={styles.container}>
-            <textarea
-                ref={textareaRef}
-                style={styles.input}
-                value={newTweet}
-                onChange={(e) => setNewTweet(e.target.value)}
-                placeholder="What's happening?"
-            />
-            <button style={styles.button} onClick={addChrip}>Add Chrip</button>
-            <button style={styles.button} onClick={(e) => window.open("https://www.markdownguide.org/cheat-sheet/", "_blank")}>Syntax</button>
-        </div>
+        <>
+            <div style={styles.container}>
+                <textarea
+                    ref={textareaRef}
+                    style={styles.input}
+                    value={newTweet}
+                    onChange={(e) => setNewTweet(e.target.value)}
+                    placeholder="What's happening?"
+                />
+                <button style={{ ...styles.button, backgroundColor: showLiveChrip ? 'green' : Style.backgroundLite }} onClick={(e) => setShowLiveChrip(!showLiveChrip)} >👁️</button>
+                <button style={styles.button} onClick={addChrip}>Add Chrip</button>
+                <button style={styles.button} onClick={(e) => window.open("https://www.markdownguide.org/cheat-sheet/", "_blank")}>Syntax</button>
+            </div>
+            {showLiveChrip &&
+                <Chrip
+                    data={{
+                        username: user.displayName,
+                        handle: `@${user.email.split('@')[0]}`,
+                        content: newTweet,
+                        useruid: user.uid
+                    }}
+                    show={false}
+                />
+            }
+        </>
     );
 }
 export default memo(ChripWriter);
