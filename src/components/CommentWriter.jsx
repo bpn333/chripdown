@@ -3,11 +3,13 @@ import { Style } from "../assets/Style";
 import { getFirestore, doc, runTransaction, collection, increment } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CommentWriter({ postId, setData, data }) {
     const { user } = useAuth();
     const [newComment, setNewComment] = useState('');
     const textareaRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -17,7 +19,7 @@ function CommentWriter({ postId, setData, data }) {
     }, [newComment]);
 
     const addComment = async () => {
-        if (!user) window.location.href = "/login";
+        if (!user) navigate("/login");
         if (newComment.trim() === '') return;
         const newCommentData = {
             username: user.displayName,

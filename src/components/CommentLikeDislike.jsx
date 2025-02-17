@@ -3,6 +3,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { useEffect, useState, useCallback } from "react";
 import { Style } from "../assets/Style";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }) {
     const { user } = useAuth();
@@ -11,6 +12,7 @@ function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLikes(initialLikes);
@@ -45,7 +47,7 @@ function CommentLikeDislike({ postId, commentId, initialLikes, initialDislikes }
     }, [user, postId, commentId]);
 
     const handleInteraction = useCallback(async (action) => {
-        if (!user) window.location.href = "/login";
+        if (!user) navigate("/login");
         if (loading) return;
 
         setLoading(true);

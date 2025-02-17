@@ -2,6 +2,7 @@ import { getFirestore, doc, runTransaction, getDoc } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Style } from "../assets/Style";
+import { useNavigate } from "react-router-dom";
 
 function LikeDislike({ id, initialLikes, initialDislikes }) {
     const { user } = useAuth();
@@ -10,6 +11,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     //fix old state retain
     useEffect(() => {
@@ -45,7 +47,7 @@ function LikeDislike({ id, initialLikes, initialDislikes }) {
     }, [user, id]);
 
     const handleInteraction = useCallback(async (action) => {
-        if (!user) window.location.href = "/login";
+        if (!user) navigate("/login");
         if (loading) return;
 
         setLoading(true);

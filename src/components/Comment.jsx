@@ -2,8 +2,10 @@ import { Style } from '../assets/Style';
 import CommentLikeDislike from './CommentLikeDislike';
 import ChripContent from './ChripContent';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Comment({ data, postId }) {
+    const navigate = useNavigate();
     const styles = useMemo(() => ({
         comment: {
             border: `1px solid ${Style.primary}`,
@@ -51,7 +53,7 @@ function Comment({ data, postId }) {
         <div style={styles.comment}>
             <div style={styles.commentHeader}>
                 <span style={styles.commentUsername}>{data.username}</span>
-                <span style={styles.commentHandle} onClick={(e) => window.location.href = '/user?id=' + data.useruid}>{data.handle}</span>
+                <span style={styles.commentHandle} onClick={(e) => navigate('/user?id=' + data.useruid)}>{data.handle}</span>
             </div>
             <ChripContent content={data.content} />
             <div style={styles.commentFooter}>

@@ -6,9 +6,11 @@ import { useAuth } from "../auth/AuthProvider";
 import Spinner from "../components/Spinner";
 import { useMemo, useState } from "react";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const { user, loading } = useAuth();
+    const navigate = useNavigate();
     const [docInProgress, setDocInProgress] = useState(false);
     const [gradient, setGradient] = useState("linear-gradient(90deg, rgb(193, 105, 255) 0%, rgb(117, 120, 255) 100%) text");
 
@@ -32,7 +34,7 @@ function Login() {
                 await setDoc(userDocRef, newUser);
             }
             setDocInProgress(false);
-            window.location.href = "/home";
+            navigate("/home");
         } catch (error) {
             console.error("Error signing in with Google: ", error);
             setDocInProgress(false);
@@ -78,7 +80,7 @@ function Login() {
             <Spinner />
         );
     } else if (user && !docInProgress) {
-        window.location.href = "/home"
+        navigate("/home");
     }
     return (
         <div style={styles.container} onMouseMove={handleMouseMove}>

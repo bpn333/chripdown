@@ -4,12 +4,14 @@ import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "fi
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
 import Chrip from './Chrip';
+import { useNavigate } from "react-router-dom";
 
 function ChripWriter({ setData, data }) {
     const { user } = useAuth();
     const [newTweet, setNewTweet] = useState('');
     const textareaRef = useRef(null);
     const [showLiveChrip, setShowLiveChrip] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -19,7 +21,7 @@ function ChripWriter({ setData, data }) {
     }, [newTweet]);
 
     const addChrip = async () => {
-        if (!user) window.location.href = "/login";
+        if (!user) navigate('/login');
         if (newTweet.trim() === '') return;
         const newChrip = {
             username: user.displayName,
@@ -86,6 +88,19 @@ function ChripWriter({ setData, data }) {
             margin: "10px"
         }
     }), [Style]);
+
+    const handlePaste = (event) => {
+        if (!event.clipboardData) return;
+
+        const htmlData = event.clipboardData.getData("text/html");
+
+        if (htmlData) {
+            setNewTweet(newTweet + htmlData);
+            event.preventDefault();
+            return;
+        }
+    };
+
     return (
         <>
             <div style={styles.container}>
@@ -95,6 +110,7 @@ function ChripWriter({ setData, data }) {
                     value={newTweet}
                     onChange={(e) => setNewTweet(e.target.value)}
                     placeholder="What's happening?"
+                    onPaste={handlePaste}
                 />
                 <button style={{ ...styles.button, backgroundColor: showLiveChrip ? 'green' : Style.backgroundLite }} onClick={(e) => setShowLiveChrip(!showLiveChrip)} >👁️</button>
                 <button
@@ -103,7 +119,7 @@ function ChripWriter({ setData, data }) {
                     onMouseEnter={(e) => (e.target.style.backgroundColor = Style.primary)}
                     onMouseLeave={(e) => (e.target.style.backgroundColor = Style.primaryLite)}
                 >Add Chrip</button>
-                <button style={styles.button} onClick={(e) => window.location.href = "/help"}>Help</button>
+                <button style={styles.button} onClick={(e) => navigate('/help')}>Help</button>
             </div>
             {(showLiveChrip && newTweet.trim()) &&
                 <Chrip

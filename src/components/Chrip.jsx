@@ -4,8 +4,9 @@ import LikeDislike from './LikeDislike';
 import ReChrips from './ReChrips';
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import ChripContent from './ChripContent';
+import { useNavigate } from 'react-router-dom';
 
-const CommentComponent = memo(({ count, id }) => {
+const CommentComponent = memo(({ count, id, navigate }) => {
     return (
         <span
             style={{
@@ -16,13 +17,14 @@ const CommentComponent = memo(({ count, id }) => {
                 cursor: 'pointer',
                 userSelect: 'none'
             }}
-            onClick={(e) => window.location.href = '/post/' + id}
+            onClick={(e) => navigate('/post/' + id)}
         >{count} 💬</span>
     );
 });
 
 function Chrip({ data, show = true }) {
     const [originalChrip, setOriginalChrip] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOriginalChrip = async () => {
@@ -87,7 +89,7 @@ function Chrip({ data, show = true }) {
         <div style={styles.chrip} >
             <div style={styles.chripHeader}>
                 <span style={styles.chripUsername}>{data.username}</span>
-                <span style={styles.chripHandle} onClick={(e) => window.location.href = '/user?id=' + data.useruid}>{data.handle}</span>
+                <span style={styles.chripHandle} onClick={(e) => navigate('/user?id=' + data.useruid)}>{data.handle}</span>
             </div>
             <ChripContent content={data.content} />
             {originalChrip && < Chrip data={originalChrip} show={false} />}
@@ -97,7 +99,7 @@ function Chrip({ data, show = true }) {
                     <span>{new Date(data.timestamp).toLocaleString()}</span>
                     <div>
                         <LikeDislike id={data.id} initialLikes={data.likes} initialDislikes={data.dislikes} />
-                        <CommentComponent count={data.comments} id={data.id} />
+                        <CommentComponent count={data.comments} id={data.id} navigate={navigate} />
                         <ReChrips id={data?.rechrip_from || data.id} initialRechrips={data.rechrips} isRechrip={originalChrip && 1} />
                     </div>
                 </div>

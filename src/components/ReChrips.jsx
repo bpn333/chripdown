@@ -3,9 +3,11 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { getFirestore, collection, addDoc, doc, runTransaction } from "firebase/firestore";
 import { useAuth } from "../auth/AuthProvider";
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ReChrips({ id, initialRechrips, isRechrip }) {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [reChrip, setReChrip] = useState(initialRechrips);
     const [showPopup, setShowPopup] = useState(false);
     const [reChripContent, setReChripContent] = useState('');
@@ -38,7 +40,7 @@ function ReChrips({ id, initialRechrips, isRechrip }) {
     }, [popupRef]);
 
     const handleReChrip = async () => {
-        if (!user) window.location.href = "/login";
+        if (!user) navigate("/login");
         if (reChripContent.trim() === '' || loading) return;
 
         setLoading(true);
