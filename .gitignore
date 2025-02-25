@@ -25,3 +25,6 @@ dist-ssr
 
 # auth token
 .env
+
+# personal note
+forMe.md

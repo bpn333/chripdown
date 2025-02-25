@@ -1,37 +1,68 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Chrip from '../components/Chrip';
 import ChripWriter from '../components/ChripWriter';
 import NavBar from '../components/NavBar';
 import Spinner from '../components/Spinner';
 import Filters from '../components/Filters';
+import { Style } from '../assets/Style';
 import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 function Body() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [chripsQuery, setChripsQuery] = useState(0);
+    const [limits, setLimits] = useState(15);
+    const [showLoadMore, setShowLoadMore] = useState(true);
 
     const chripsRef = useMemo(() => collection(getFirestore(), "chrips"), []);
 
     const Queries = useMemo(() => [
-        query(chripsRef, orderBy("timestamp", "desc"), orderBy("likes", "desc"), limit(15)),    // recent
-        query(chripsRef, orderBy("likes", "desc"), orderBy("dislikes", "asc"), orderBy("timestamp", "desc"), limit(15)),    // popular
-        query(chripsRef, orderBy("dislikes", "desc"), limit(15)),    // most controversial
-        query(chripsRef, orderBy("rechrips", "desc"), limit(15)),   // rechrips
-        query(chripsRef, orderBy("comments", "desc"), limit(15)),    // comments
+        query(chripsRef, orderBy("timestamp", "desc"), orderBy("likes", "desc"), limit(limits)),    // recent
+        query(chripsRef, orderBy("likes", "desc"), orderBy("dislikes", "asc"), orderBy("timestamp", "desc"), limit(limits)),    // popular
+        query(chripsRef, orderBy("dislikes", "desc"), orderBy("likes", "asc"), orderBy("timestamp", "desc"), limit(limits)),    // most controversial
+        query(chripsRef, orderBy("rechrips", "desc"), limit(limits)),   // rechrips
+        query(chripsRef, orderBy("comments", "desc"), limit(limits)),    // comments
         query(chripsRef, orderBy("timestamp", "asc"))   //everything
-    ], [chripsRef]);
+    ], [chripsRef, limits]);
+
+    const unsubscribeRef = useRef(null);
+    // const oldQuery = useRef(0);
 
     useEffect(() => {
         setLoading(true);
-        const unsubscribe = onSnapshot(Queries[chripsQuery], (querySnapshot) => {
-            setData(querySnapshot.docs.map(doc => ({
+        chripsQuery == 5 ? setShowLoadMore(false) : setShowLoadMore(true);
+        setLimits(15);
+    }, [chripsQuery])
+
+    useEffect(() => {
+        setLoading(true);
+        unsubscribeRef.current?.();
+        // if (oldQuery.current != chripsQuery) {
+        //     setData([]);
+        //     oldQuery.current = chripsQuery;
+        // }
+        unsubscribeRef.current = onSnapshot(Queries[chripsQuery], (querySnapshot) => {
+            const newDocs = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            })));
+            }));
+            setData(prevData => {
+                // let newItemAdded = false;
+                // console.log(oldQuery.current, chripsQuery)
+                const dataMap = new Map();
+                newDocs.forEach(item => {
+                    // if (!dataMap.has(item.id)) {
+                    //     newItemAdded = true;                         // future me issues
+                    // }
+                    dataMap.set(item.id, item);
+                });
+                // newItemAdded || setShowLoadMore(false);
+                // oldQuery.current = chripsQuery;
+                return Array.from(dataMap.values());
+            });
             setLoading(false);
         });
-        return () => unsubscribe();
+        return () => unsubscribeRef.current?.();
     }, [chripsQuery, Queries]);
 
     const styles = {
@@ -41,9 +72,22 @@ function Body() {
             justifyContent: 'center',
             borderRadius: '10px',
         },
+        button: {
+            display: 'flex',
+            padding: '8px',
+            backgroundColor: Style.backgroundLite,
+            color: Style.primaryLite,
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontFamily: Style.font2,
+            fontSize: '20px',
+            userSelect: 'none',
+            margin: '0 auto'
+        }
     };
 
-    if (loading) {
+    if (loading && data.length === 0) {
         return <Spinner />;
     }
 
@@ -57,6 +101,7 @@ function Body() {
                     <Chrip key={item.id} data={item} />
                 ))}
             </div>
+            {showLoadMore && <button onClick={() => setLimits(limits + 10)} style={styles.button}>Load More</button>}
         </>
     );
 }

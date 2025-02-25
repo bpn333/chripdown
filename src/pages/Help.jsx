@@ -8,6 +8,7 @@ const Help = () => {
     const { user } = useAuth();
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [fullScreen, setFullScreen] = useState(false);
     const [markdown, setMarkdown] = useState('### markdown is not that scary\n*play around and learn here*\n# 😊 \n<a style="text-decoration:none; color: lime; font-family: Bebas Neue" href="https://github.com/bpn333">You can find me here</a>');
     const markdownRef = useRef(null);
 
@@ -22,7 +23,7 @@ const Help = () => {
             markdownRef.current.style.height = "auto";
             markdownRef.current.style.height = `${markdownRef.current.scrollHeight}px`;
         }
-    }, [markdown]);
+    }, [markdown, fullScreen]);
 
     const styles = useMemo(() => ({
         container: {
@@ -42,7 +43,7 @@ const Help = () => {
         },
         input: {
             width: "100%",
-            maxWidth: "500px",
+            flex: "1 1 500px",
             padding: "12px",
             borderRadius: "6px",
             border: `1px solid ${Style.primaryLite}`,
@@ -54,7 +55,6 @@ const Help = () => {
         },
         textarea: {
             width: "100%",
-            maxWidth: "500px",
             padding: "12px",
             borderRadius: "6px",
             border: `1px solid ${Style.primaryLite}`,
@@ -65,6 +65,8 @@ const Help = () => {
             resize: "none",
             minHeight: "120px",
             outline: "none",
+            flex: "1 1 500px",
+            boxSizing: "border-box",
         },
         button: {
             padding: "12px 20px",
@@ -94,16 +96,14 @@ const Help = () => {
         markdownPlaygroundContainer: {
             display: "flex",
             flexDirection: "row",
-            alignItems: "stretch",
             justifyContent: "center",
             width: "100%",
             gap: "15px",
-            marginTop: "20px",
-            flexWrap: "wrap"
+            margin: "15px 1vw",
+            flexWrap: "wrap",
         },
         markdownOutput: {
             width: "100%",
-            maxWidth: "500px",
             padding: "12px",
             borderRadius: "6px",
             border: `1px solid ${Style.primaryLite}`,
@@ -112,6 +112,10 @@ const Help = () => {
             fontFamily: Style.font1,
             fontSize: "16px",
             overflowWrap: "break-word",
+            flex: fullScreen ? "5 1 800px" : "1 1 500px",
+            overflowX: "auto",
+            boxSizing: "border-box",
+            height: fullScreen ? "91vh" : "auto",
         },
         link: {
             color: Style.primaryLite,
@@ -122,15 +126,54 @@ const Help = () => {
             marginTop: "10px",
             userSelect: "none"
         },
-    }), [Style]);
+    }), [Style, fullScreen]);
+
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setFullScreen(!!document.fullscreenElement);
+            markdownRef.current.style.height = "auto";
+            markdownRef.current.style.height = `${markdownRef.current.scrollHeight}px`;
+        };
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        return () => {
+            document.removeEventListener("fullscreenchange", handleFullscreenChange);
+        };
+    }, []);
 
     return (
         <>
-            <NavBar />
+            {!fullScreen && <NavBar />}
             <div style={styles.container}>
-                <h2 style={styles.heading}>About</h2>
-                <p style={styles.paragraph}>Welcome to ChirpDown, a truly open and unrestricted social platform. Inspired by Twitter but built for free expression, we empower you to share ideas without limits. We support Markdown formatting, allowing for rich and creative posts. Unlike traditional social networks, there are no restrictions. You can trash talk anyone, express controversial views, or share content ranging from wholesome texts and images to hardcore porn, NSFW material, and gore content. However, media files must be hosted externally and linked using Markdown to display them.</p>
-                <h2 style={styles.heading}>Markdown Playground</h2>
+                {!fullScreen &&
+                    <>
+                        <h2 style={styles.heading}>About</h2>
+                        <p style={styles.paragraph}>Welcome to ChirpDown, a truly open and unrestricted social platform. Inspired by Twitter but built for free expression, we empower you to share ideas without limits. We support Markdown formatting, allowing for rich and creative posts. Unlike traditional social networks, there are no restrictions. You can trash talk anyone, express controversial views, or share content ranging from wholesome texts and images to hardcore porn, NSFW material, and gore content. However, media files must be hosted externally and linked using Markdown to display them.</p>
+                        <h2 style={styles.heading}>Markdown Playground</h2>
+                        <button
+                            style={
+                                {
+                                    backgroundColor: "transparent",
+                                    border: "2px dashed" + Style.primaryLite,
+                                    fontSize: "30px",
+                                    cursor: "pointer",
+                                    lineHeight: "100%",
+                                    textAlign: "center",
+                                    padding: "3px",
+                                    borderRadius: "10px"
+                                }
+                            }
+                            onClick={() => {
+                                if (!document.fullscreenElement) {
+                                    document.documentElement.requestFullscreen();
+                                    setFullScreen(true);
+                                } else {
+                                    document.exitFullscreen();
+                                    setFullScreen(false);
+                                }
+                            }}
+                        >⛶</button>
+                    </>
+                }
                 <div style={styles.markdownPlaygroundContainer}>
                     <textarea
                         placeholder="Write your markdown here..."
@@ -144,50 +187,54 @@ const Help = () => {
                         dangerouslySetInnerHTML={{ __html: marked(markdown) }}
                     />
                 </div>
-                <a
-                    href="https://www.markdownguide.org/basic-syntax/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={styles.link}
-                >
-                    Learn more about Markdown
-                </a>
-                <h2 style={styles.heading}>Help & Support</h2>
-                <form
-                    action="https://formsubmit.co/50342c617a04b1322ac19cbc0abb273d"
-                    method="POST"
-                    style={styles.form}
-                >
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        style={styles.input}
-                    />
-                    <textarea
-                        name="message"
-                        placeholder="Your message"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        required
-                        style={styles.textarea}
-                    />
-                    <button
-                        type="submit"
-                        style={styles.button}
-                        onMouseEnter={(e) =>
-                            (e.target.style.backgroundColor = Style.primary)
-                        }
-                        onMouseLeave={(e) =>
-                            (e.target.style.backgroundColor = Style.primaryLite)
-                        }
-                    >
-                        Send
-                    </button>
-                </form>
+                {!fullScreen &&
+                    <>
+                        <a
+                            href="https://www.markdownguide.org/basic-syntax/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={styles.link}
+                        >
+                            Learn more about Markdown
+                        </a>
+                        <h2 style={styles.heading}>Help & Support</h2>
+                        <form
+                            action="https://formsubmit.co/50342c617a04b1322ac19cbc0abb273d"
+                            method="POST"
+                            style={styles.form}
+                        >
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                style={styles.input}
+                            />
+                            <textarea
+                                name="message"
+                                placeholder="Your message"
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                required
+                                style={styles.textarea}
+                            />
+                            <button
+                                type="submit"
+                                style={styles.button}
+                                onMouseEnter={(e) =>
+                                    (e.target.style.backgroundColor = Style.primary)
+                                }
+                                onMouseLeave={(e) =>
+                                    (e.target.style.backgroundColor = Style.primaryLite)
+                                }
+                            >
+                                Send
+                            </button>
+                        </form>
+                    </>
+                }
             </div>
         </>
     );
