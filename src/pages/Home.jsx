@@ -5,12 +5,15 @@ import NavBar from '../components/NavBar';
 import Spinner from '../components/Spinner';
 import Filters from '../components/Filters';
 import { Style } from '../assets/Style';
+import { useSearchParams } from 'react-router-dom';
 import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 function Body() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const filter = searchParams.get('filter');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [chripsQuery, setChripsQuery] = useState(0);
+    const [chripsQuery, setChripsQuery] = useState(filter ? filter : 0);
     const [limits, setLimits] = useState(15);
     const [showLoadMore, setShowLoadMore] = useState(true);
 
@@ -26,15 +29,17 @@ function Body() {
     ], [chripsRef, limits]);
 
     const unsubscribeRef = useRef(null);
-    // const oldQuery = useRef(0);
+    const oldQuery = useRef(0);
 
     useEffect(() => {
         setLoading(true);
         chripsQuery == 5 ? setShowLoadMore(false) : setShowLoadMore(true);
         setLimits(15);
+        (filter || chripsQuery != 0) && setSearchParams({ filter: chripsQuery });
     }, [chripsQuery])
 
     useEffect(() => {
+        if (chripsQuery > Queries.length) return;
         setLoading(true);
         unsubscribeRef.current?.();
         // if (oldQuery.current != chripsQuery) {
@@ -47,17 +52,20 @@ function Body() {
                 ...doc.data()
             }));
             setData(prevData => {
-                // let newItemAdded = false;
+                let newItemAdded = false;
                 // console.log(oldQuery.current, chripsQuery)
                 const dataMap = new Map();
+                const oldMap = new Map(prevData.map(pd => [pd.id, pd]));
                 newDocs.forEach(item => {
-                    // if (!dataMap.has(item.id)) {
-                    //     newItemAdded = true;                         // future me issues
-                    // }
+                    if (!oldMap.has(item.id)) {
+                        newItemAdded = true;            // future me issues
+                    }
                     dataMap.set(item.id, item);
                 });
-                // newItemAdded || setShowLoadMore(false);
-                // oldQuery.current = chripsQuery;
+                // console.log(oldMap, dataMap);
+                // console.log(newItemAdded);
+                newItemAdded || setShowLoadMore(false);
+                oldQuery.current = chripsQuery;
                 return Array.from(dataMap.values());
             });
             setLoading(false);
@@ -87,6 +95,9 @@ function Body() {
         }
     };
 
+    if (chripsQuery > Queries.length) {
+        return <h1>ERROR</h1>
+    }
     if (loading && data.length === 0) {
         return <Spinner />;
     }
