@@ -27,6 +27,7 @@ const User = () => {
         userImg: {
             borderRadius: '50%',
             width: '150px',
+            height: '150px',
             margin: '30px',
         },
         userUsr: {
