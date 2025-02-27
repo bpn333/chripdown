@@ -152,8 +152,7 @@ const Help = () => {
                         <button
                             style={
                                 {
-                                    backgroundColor: "transparent",
-                                    border: "2px dashed" + Style.primaryLite,
+                                    backgroundColor: Style.primaryLite,
                                     fontSize: "30px",
                                     cursor: "pointer",
                                     lineHeight: "100%",
