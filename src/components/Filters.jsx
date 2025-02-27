@@ -1,5 +1,12 @@
 import { Style } from "../assets/Style";
-function Filters({ filter, setFilter }) {
+import { useSearchParams } from "react-router-dom";
+function Filters({ filter }) {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const setFilter = (value) => {
+        const currentFilter = Number(searchParams.get('filter')) || 0;
+        currentFilter != value && setSearchParams({ filter: value });
+    }
     const Filters = {
         Recent: 0,
         Popular: 1,

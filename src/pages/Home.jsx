@@ -9,11 +9,10 @@ import { useSearchParams } from 'react-router-dom';
 import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 function Body() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const filter = searchParams.get('filter');
+    const [searchParams] = useSearchParams();
+    const chripsQuery = Number(searchParams.get('filter')) || 0;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [chripsQuery, setChripsQuery] = useState(filter ? filter : 0);
     const [limits, setLimits] = useState(15);
     const [showLoadMore, setShowLoadMore] = useState(true);
 
@@ -29,23 +28,17 @@ function Body() {
     ], [chripsRef, limits]);
 
     const unsubscribeRef = useRef(null);
-    const oldQuery = useRef(0);
 
     useEffect(() => {
         setLoading(true);
         chripsQuery == 5 ? setShowLoadMore(false) : setShowLoadMore(true);
-        setLimits(15);
-        (filter || chripsQuery != 0) && setSearchParams({ filter: chripsQuery });
+        setLimits(15); // something is messed up here
     }, [chripsQuery])
 
     useEffect(() => {
         if (chripsQuery > Queries.length) return;
         setLoading(true);
         unsubscribeRef.current?.();
-        // if (oldQuery.current != chripsQuery) {
-        //     setData([]);
-        //     oldQuery.current = chripsQuery;
-        // }
         unsubscribeRef.current = onSnapshot(Queries[chripsQuery], (querySnapshot) => {
             const newDocs = querySnapshot.docs.map(doc => ({
                 id: doc.id,
@@ -53,7 +46,6 @@ function Body() {
             }));
             setData(prevData => {
                 let newItemAdded = false;
-                // console.log(oldQuery.current, chripsQuery)
                 const dataMap = new Map();
                 const oldMap = new Map(prevData.map(pd => [pd.id, pd]));
                 newDocs.forEach(item => {
@@ -62,10 +54,7 @@ function Body() {
                     }
                     dataMap.set(item.id, item);
                 });
-                // console.log(oldMap, dataMap);
-                // console.log(newItemAdded);
                 newItemAdded || setShowLoadMore(false);
-                oldQuery.current = chripsQuery;
                 return Array.from(dataMap.values());
             });
             setLoading(false);
@@ -106,7 +95,7 @@ function Body() {
         <>
             <NavBar />
             <ChripWriter setData={setData} data={data} />
-            <Filters filter={chripsQuery} setFilter={setChripsQuery} />
+            <Filters filter={chripsQuery} />
             <div style={styles.container}>
                 {data.map((item) => (
                     <Chrip key={item.id} data={item} />
