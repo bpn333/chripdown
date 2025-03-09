@@ -109,32 +109,38 @@ const User = () => {
         fetchUserData();
     }, [id]);
 
-    if (loading) return <Spinner />;
-    if (!userData) return <div>User not found</div>;
+    if (!loading && !userData) return <h1>User Dont Exit</h1>
 
     return (
         <>
             <NavBar />
-            <div style={styles.userContainer}>
-                <img style={styles.userImg} src={userData.img} alt="User profile" />
-                <div style={styles.userExtra}>
-                    <span style={styles.userUsr}>{userData.username}</span>
-                    <span style={styles.userInfo}>@{userData.email.split('@')[0]}</span>
-                    <span style={styles.userDate}>Since {userData.joined.slice(0, -4)}</span>
-                    {verifiedUser && <button style={styles.signOutButton}
-                        onClick={async () => {
-                            try {
-                                await signOut(auth);
-                            } catch (error) {
-                                console.error("Sign-out error:", error);
-                            }
-                        }}
-                    >LogOut</button>}
-                </div>
-            </div>
-            <div style={styles.userChrips}>
-                {chrips.map((chrip) => <Chrip key={chrip.id} data={chrip} />)}
-            </div>
+            {!loading
+                ?
+                <>
+                    <div style={styles.userContainer}>
+                        <img style={styles.userImg} src={userData.img} alt="User profile" />
+                        <div style={styles.userExtra}>
+                            <span style={styles.userUsr}>{userData.username}</span>
+                            <span style={styles.userInfo}>@{userData.email.split('@')[0]}</span>
+                            <span style={styles.userDate}>Since {userData.joined.slice(0, -4)}</span>
+                            {verifiedUser && <button style={styles.signOutButton}
+                                onClick={async () => {
+                                    try {
+                                        await signOut(auth);
+                                    } catch (error) {
+                                        console.error("Sign-out error:", error);
+                                    }
+                                }}
+                            >LogOut</button>}
+                        </div>
+                    </div>
+                    <div style={styles.userChrips}>
+                        {chrips.map((chrip) => <Chrip key={chrip.id} data={chrip} />)}
+                    </div>
+                </>
+                :
+                <Spinner />
+            }
         </>
     );
 };

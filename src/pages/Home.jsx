@@ -87,21 +87,24 @@ function Body() {
     if (chripsQuery > Queries.length) {
         return <h1>ERROR</h1>
     }
-    if (loading && data.length === 0) {
-        return <Spinner />;
-    }
 
     return (
         <>
-            <NavBar />
-            <ChripWriter setData={setData} data={data} />
-            <Filters filter={chripsQuery} />
-            <div style={styles.container}>
-                {data.map((item) => (
-                    <Chrip key={item.id} data={item} />
-                ))}
-            </div>
-            {showLoadMore && <button onClick={() => setLimits(limits + 10)} style={styles.button}>Load More</button>}
+            {!loading ?
+                <>
+                    <NavBar />
+                    <ChripWriter setData={setData} data={data} />
+                    <Filters filter={chripsQuery} />
+                    <div style={styles.container}>
+                        {data.map((item) => (
+                            <Chrip key={item.id} data={item} />
+                        ))}
+                    </div>
+                    {showLoadMore && <button onClick={() => setLimits(limits + 10)} style={styles.button}>Load More</button>}
+                </>
+                :
+                <Spinner />
+            }
         </>
     );
 }
