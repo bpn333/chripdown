@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getFirestore, doc, onSnapshot, collection, query, getDocs, limit } from "firebase/firestore";
+import { getFirestore, doc, onSnapshot, collection, query, getDocs, orderBy } from "firebase/firestore";
 import Spinner from "../components/Spinner";
 import Chrip from "../components/Chrip";
 import NavBar from "../components/NavBar";
 import CommentWriter from "../components/CommentWriter";
 import Comment from "../components/Comment";
+import { Style } from "../assets/Style";
 
 const Post = () => {
     const { id } = useParams();
+    const [commentFilter, setCommentFilter] = useState("Recent");
     const [postData, setPostData] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,11 +24,31 @@ const Post = () => {
         commentsContainer: {
             display: 'flex',
             flexDirection: 'column',
+        },
+        filter: {
+            marginTop: '5px',
+            alignSelf: 'center',
+            width: '250px',
+            padding: '8px',
+            backgroundColor: Style.backgroundLite,
+            color: Style.primaryLite,
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontFamily: Style.font2,
+            fontSize: '18px',
+            userSelect: 'none'
         }
+    }), [Style]);
+    const db = getFirestore();
+    const commentsRef = collection(db, `chrips/${id}/comments/`);
+    const commentsQueries = useMemo(() => ({
+        "Most Liked": query(commentsRef, orderBy("likes", "desc")), // Most Liked
+        "Recent": query(commentsRef, orderBy("timestamp", "desc")), // Recent
+        "Most Disliked": query(commentsRef, orderBy("dislikes", "desc")) // Most Disliked
     }), []);
 
     useEffect(() => {
-        const db = getFirestore();
         const postDoc = doc(db, "chrips", id);
 
         // Real-time listener for post data
@@ -43,9 +65,7 @@ const Post = () => {
             }
         });
 
-        const commentsRef = collection(db, `chrips/${id}/comments/`);
-        const commentsQuery = query(commentsRef, limit(10));
-        getDocs(commentsQuery).then((commentsSnapshot) => {
+        getDocs(commentsQueries[commentFilter]).then((commentsSnapshot) => {
             const commentsData = commentsSnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
@@ -54,7 +74,7 @@ const Post = () => {
         });
 
         return () => unsubscribe();
-    }, [id]);
+    }, [id, commentFilter]);
 
     if (loading) {
         return <Spinner />;
@@ -70,6 +90,13 @@ const Post = () => {
             <Chrip data={postData} />
             <CommentWriter postId={id} setData={setComments} data={comments} />
             <div style={styles.container}>
+                <select style={styles.filter} value={commentFilter} onChange={(e) => setCommentFilter(e.target.value)}>
+                    {Object.keys(commentsQueries).map((k, i) => (
+                        <option key={i} value={k}>
+                            {k}
+                        </option>
+                    ))}
+                </select>
                 {comments.map((comment) => (
                     <Comment key={comment.id} data={comment} postId={id} />
                 ))}
