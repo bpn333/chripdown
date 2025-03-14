@@ -41,16 +41,24 @@ const Post = () => {
         }
     }), [Style]);
     const db = getFirestore();
+    const postDoc = doc(db, `chrips/${id}`);
     const commentsRef = collection(db, `chrips/${id}/comments/`);
     const commentsQueries = useMemo(() => ({
         "Most Liked": query(commentsRef, orderBy("likes", "desc")), // Most Liked
         "Recent": query(commentsRef, orderBy("timestamp", "desc")), // Recent
         "Most Disliked": query(commentsRef, orderBy("dislikes", "desc")) // Most Disliked
-    }), []);
+    }), [commentsRef]);
+    useEffect(() => {
+        getDocs(commentsQueries[commentFilter]).then((commentsSnapshot) => {
+            const commentsData = commentsSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setComments(commentsData);
+        });
+    }, [commentFilter]);
 
     useEffect(() => {
-        const postDoc = doc(db, "chrips", id);
-
         // Real-time listener for post data
         const unsubscribe = onSnapshot(postDoc, (postSnapshot) => {
             if (postSnapshot.exists()) {
@@ -65,16 +73,8 @@ const Post = () => {
             }
         });
 
-        getDocs(commentsQueries[commentFilter]).then((commentsSnapshot) => {
-            const commentsData = commentsSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setComments(commentsData);
-        });
-
         return () => unsubscribe();
-    }, [id, commentFilter]);
+    }, [id]);
 
     if (loading) {
         return <Spinner />;
