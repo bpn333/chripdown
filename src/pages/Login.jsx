@@ -34,13 +34,8 @@ function Login() {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            const isNewUser = result.additionalUserInfo.isNewUser;
-            if (isNewUser) {
-                await createUserDoc(user);
-            } else {
-                setDocInProgress(false);
-                navigate("/home");
-            }
+            // const isNewUser = result.additionalUserInfo.isNewUser; // Race condition here
+            await createUserDoc(user);
         } catch (error) {
             console.error("Error signing in with Google: ", error);
             setDocInProgress(false);
